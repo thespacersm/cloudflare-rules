@@ -10,40 +10,40 @@
 
 ### Regole e Condizioni con Commenti
 
-**DOOFINDER CRAWLER (IP EU, USA, ASIA)**
+#### DOOFINDER CRAWLER (IP EU, USA, ASIA)
 ip.src in {54.171.4.216 52.2.218.41 18.143.220.25}
 
-**PAGAMENTI JAVA (TRIVENETO, NEXI, ECC.)**
+#### PAGAMENTI JAVA (TRIVENETO, NEXI, ECC.)
 http.user_agent contains "Java" and ip.src.country eq "IT"
 
-**ASN GOOGLE**
+#### ASN GOOGLE
 ip.src.asnum in {15169 396982}
 
-**Bot Ufficiali - Crawler Google verificato**
+#### Bot Ufficiali - Crawler Google verificato
 cf.client.bot and http.user_agent contains "Google"
 
-**Bot Ufficiali - Crawler Bing verificato**
+#### Bot Ufficiali - Crawler Bing verificato
 cf.client.bot and http.user_agent contains "bingbot"
 
-**Gestionale - Sincronizzazione Danea Easyfatt**
+#### Gestionale - Sincronizzazione Danea Easyfatt
 http.user_agent contains "DaneaEasyfatt"
 
-**Monitoraggio - Uptime Kuma probe**
+#### Monitoraggio - Uptime Kuma probe
 ip.src eq 49.12.69.209 and http.user_agent contains "Kuma"
 
-**Estensioni Immagini / Media CDN**
+#### Estensioni Immagini / Media CDN
 ends_with(http.request.uri.path, ".jpg") or ends_with(http.request.uri.path, ".jpeg") or ends_with(http.request.uri.path, ".png") or ends_with(http.request.uri.path, ".webp") or ends_with(http.request.uri.path, ".gif") or ends_with(http.request.uri.path, ".svg") or ends_with(http.request.uri.path, ".ico") or ends_with(http.request.uri.path, ".avif")
 
-**Path / Feed - Feed prodotti**
+#### Path / Feed - Feed prodotti
 http.request.uri.path contains "feed"
 
-**Path / Feed - Crawler / bot TrovaPrezzi**
+#### Path / Feed - Crawler / bot TrovaPrezzi
 http.request.uri.path contains "trovaprezzi"
 
-**Path / Feed - Ricerca Doofinder**
+#### Path / Feed - Ricerca Doofinder
 http.request.uri.path contains "doofinder"
 
-**Path / Sync - Connector eBay / Amazon M2E Pro**
+#### Path / Sync - Connector eBay / Amazon M2E Pro
 http.request.uri.path contains "M2ePro"
 
 ---
