@@ -11,49 +11,94 @@
 ### Regole e Condizioni con Commenti
 
 #### DOOFINDER CRAWLER (IP EU, USA, ASIA)
+Indirizzi IP ufficiali dei server e crawler Doofinder utilizzati per scaricare il catalogo e indicizzare i prodotti nella barra di ricerca.
+```text
 ip.src in {54.171.4.216 52.2.218.41 18.143.220.25}
+```
 
 #### PAGAMENTI JAVA (TRIVENETO, NEXI, ECC.)
+Chiamate di notifica/callback server-to-server dei gateway di pagamento bancari (es. Consorzio Triveneto, Nexi) effettuate tramite client Java da IP italiano.
+```text
 http.user_agent contains "Java" and ip.src.country eq "IT"
+```
 
 #### ASN GOOGLE
+Autonomous System Numbers (ASN) di Google e Google Cloud per garantire l'accesso a servizi, crawler e API di Google.
+```text
 ip.src.asnum in {15169 396982}
+```
 
 #### Bot Ufficiali - Crawler Google verificato
+Crawler ufficiale Googlebot con verifica di autenticità gestita da Cloudflare Bot Management per l'indicizzazione SEO.
+```text
 cf.client.bot and http.user_agent contains "Google"
+```
 
 #### Bot Ufficiali - Crawler Bing verificato
+Crawler ufficiale Bingbot con verifica di autenticità gestita da Cloudflare Bot Management per l'indicizzazione SEO.
+```text
 cf.client.bot and http.user_agent contains "bingbot"
+```
 
 #### Gestionale - Sincronizzazione Danea Easyfatt
+Chiamate del software gestionale Danea Easyfatt per l'aggiornamento automatico di catalogo, ordini e giacenze.
+```text
 http.user_agent contains "DaneaEasyfatt"
+```
 
 #### Monitoraggio - Uptime Kuma probe
+Sonda di monitoraggio Uptime Kuma per il controllo costante di disponibilità del sito e stato del server.
+```text
 ip.src eq 49.12.69.209 and http.user_agent contains "Kuma"
+```
 
 #### Estensioni Immagini / Media CDN
+Bypass delle regole di blocco per asset grafici e file multimediali, evitando blocchi CDN o anteprime corrotte da server esterni.
+```text
 ends_with(http.request.uri.path, ".jpg") or ends_with(http.request.uri.path, ".jpeg") or ends_with(http.request.uri.path, ".png") or ends_with(http.request.uri.path, ".webp") or ends_with(http.request.uri.path, ".gif") or ends_with(http.request.uri.path, ".svg") or ends_with(http.request.uri.path, ".ico") or ends_with(http.request.uri.path, ".avif")
+```
 
 #### Path / Feed - Feed prodotti
+Endpoint URL dedicati all'esportazione dei feed prodotti verso comparatori e aggregatori di vendita.
+```text
 http.request.uri.path contains "feed"
+```
 
 #### Path / Feed - Crawler / bot TrovaPrezzi
+Richieste provenienti dai crawler e spider di TrovaPrezzi per la sincronizzazione dei prezzi e delle offerte.
+```text
 http.request.uri.path contains "trovaprezzi"
+```
 
 #### Path / Feed - Ricerca Doofinder
+Richieste verso endpoint di ricerca o feed specifici dedicati a Doofinder.
+```text
 http.request.uri.path contains "doofinder"
+```
 
 #### Path / Sync - Connector eBay / Amazon M2E Pro
+Chiamate API del connettore M2E Pro per la sincronizzazione dei marketplace Amazon ed eBay.
+```text
 http.request.uri.path contains "M2ePro"
+```
 
 #### WooCommerce REST API & Sync
+Accesso alle REST API native di WooCommerce per sincronizzazioni esterne con app, gestionali e servizi terzi.
+```text
 http.user_agent contains "WooCommerce" or http.request.uri.path contains "/wp-json/wc/"
+```
 
 #### Automattic / Jetpack / WordPress.com
+Rete e servizi cloud di Automattic (AS2635) per sincronizzazione Jetpack, backup, statistiche e CDN.
+```text
 (ip.src.asnum eq 2635) or (http.user_agent contains "Jetpack") or (http.user_agent contains "WordPress.com") or (http.request.uri.path contains "/wp-json/jetpack/")
+```
 
 #### Brevo (Sendinblue) WooCommerce
+Integrazione ufficiale e webhook del plugin Brevo per l'invio di email transazionali e marketing automation.
+```text
 http.user_agent contains "Brevo-WC" or http.request.uri.path contains "/wp-json/sendinblue-woo/"
+```
 
 ---
 

@@ -17,10 +17,16 @@ Deve trovarsi **dopo** la regola di Cache Whitelist / Bypass.
 ### Condizioni con Commenti
 
 #### 1. Metodi di richiesta supportati per la cache
+Consente la memorizzazione in cache solo per le richieste di lettura idempotenti (GET e HEAD).
+```text
 http.request.method in {"GET" "HEAD"}
+```
 
 #### 2. Solo traffico pubblico (quando usata come regola stand-alone con esclusione integrata)
+Esclude tutte le pagine private, carrelli, sessioni utente e percorsi amministrativi per cachare solo la navigazione del catalogo pubblico.
+```text
 not (http.request.uri.path contains "/cart" or http.request.uri.path contains "/checkout" or http.request.uri.path contains "/my-account" or http.request.uri.path contains "/carrello" or http.request.uri.path contains "/cassa" or http.request.uri.path contains "/mio-account" or http.request.uri.path contains "wp-admin" or http.request.uri.path contains "/wp-login" or http.request.uri.path contains "/wp-json" or http.request.uri.path contains "/xmlrpc.php" or http.request.uri.path contains "/wc-api" or http.request.uri.path contains "/addons" or http.request.uri.query contains "add-to-cart" or http.cookie contains "woocommerce_items_in_cart" or http.cookie contains "wp_woocommerce_session_" or http.cookie contains "wordpress_logged_in_")
+```
 
 ---
 
