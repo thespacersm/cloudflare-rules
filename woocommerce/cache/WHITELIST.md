@@ -12,22 +12,22 @@ Deve trovarsi **prima** della regola di FPC (priorità più alta).
 
 ### Condizioni Dettagliate con Commenti
 
-# 1. Carrello, Cassa e Account Utente (IT & EN)
+**1. Carrello, Cassa e Account Utente (IT & EN)**
 http.request.uri.path contains "/cart" or http.request.uri.path contains "/checkout" or http.request.uri.path contains "/my-account" or http.request.uri.path contains "/carrello" or http.request.uri.path contains "/cassa" or http.request.uri.path contains "/mio-account"
 
-# 2. Amministrazione WordPress & Login
+**2. Amministrazione WordPress & Login**
 http.request.uri.path contains "/wp-admin" or http.request.uri.path contains "/wp-login"
 
-# 3. Endpoint API, Webhook e XML-RPC
+**3. Endpoint API, Webhook e XML-RPC**
 http.request.uri.path contains "/wp-json" or http.request.uri.path contains "/wc-api" or http.request.uri.path contains "/xmlrpc.php" or http.request.uri.path contains "/addons"
 
-# 4. Query String di carrello
+**4. Query String di carrello**
 http.request.uri.query contains "add-to-cart"
 
-# 5. Cookie di Sessione Carrello WooCommerce
+**5. Cookie di Sessione Carrello WooCommerce**
 http.cookie contains "woocommerce_items_in_cart" or http.cookie contains "woocommerce_cart_hash" or http.cookie contains "wp_woocommerce_session_"
 
-# 6. Cookie Utente Loggato WordPress
+**6. Cookie Utente Loggato WordPress**
 http.cookie contains "wordpress_logged_in_"
 
 ---
