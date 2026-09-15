@@ -2,7 +2,13 @@
 
 Questa regola definisce **COSA CACHARE** a livello di Edge Cloudflare. Nella logica a due regole, questa regola memorizza in cache **tutto il traffico pubblico** (articoli, pagine, categorie, homepage, landing page), poiché tutte le pagine dinamiche, carrelli e sessioni sono già state intercettate e skippate dalla regola precedente **Cache Whitelist (Bypass)**.
 
-### Architettura a 2 Regole (Cloudflare Cache Rules)
+### Ordine di Esecuzione delle Regole (Cloudflare Cache Rules)
+Nel Ruleset Engine di Cloudflare per le Cache Rules, **l'ultima regola che matcha ha la precedenza** (sovrascrive le impostazioni delle precedenti).
+
+Pertanto, l'ordine di inserimento è:
+1. **Regola 1 (FPC - Cache Everything)**: abilita la cache su tutte le richieste pubbliche `http.request.method in {"GET" "HEAD"}`.
+2. **Regola 2 (Whitelist - Bypass Cache)**: posizionata **sotto/dopo** l'FPC, intercetta le eccezioni del CMS (carrello, admin, login, cookie) e imposta `Bypass cache` (`cache: false`), sovrascrivendo l'FPC.
+
 1. **Regola 1 (Priorità 1 - Bypass)**: definita in [`WHITELIST.md`](./WHITELIST.md), esclude carrello, checkout, account utente, admin, API e cookie di sessione.
 2. **Regola 2 (Priorità 2 - FPC Tutto)**: questa regola, memorizza in cache tutto il traffico di navigazione rimanente.
 
