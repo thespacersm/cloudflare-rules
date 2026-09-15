@@ -181,8 +181,8 @@ def main():
         platform = profile["platform"]
         print(f"\nBuilding [{platform}]...")
 
-        dest_waf = os.path.join(BASE_DIR, platform, "waf")
-        dest_cache = os.path.join(BASE_DIR, platform, "cache")
+        dest_waf = os.path.join(BASE_DIR, "build", platform, "waf")
+        dest_cache = os.path.join(BASE_DIR, "build", platform, "cache")
         os.makedirs(dest_waf, exist_ok=True)
         os.makedirs(dest_cache, exist_ok=True)
 
@@ -190,25 +190,25 @@ def main():
         waf_whitelist_md = build_waf_whitelist(profile)
         with open(os.path.join(dest_waf, "WHITELIST.md"), "w", encoding="utf-8") as f:
             f.write(waf_whitelist_md)
-        print(f"  -> {platform}/waf/WHITELIST.md")
+        print(f"  -> build/{platform}/waf/WHITELIST.md")
 
         # 2. WAF Country Block
         waf_country_block_md = build_waf_country_block(profile)
         with open(os.path.join(dest_waf, "COUNTRY_BLOCK.md"), "w", encoding="utf-8") as f:
             f.write(waf_country_block_md)
-        print(f"  -> {platform}/waf/COUNTRY_BLOCK.md")
+        print(f"  -> build/{platform}/waf/COUNTRY_BLOCK.md")
 
         # 3. Cache Whitelist (Bypass)
         cache_whitelist_md = build_cache_whitelist(profile)
         with open(os.path.join(dest_cache, "WHITELIST.md"), "w", encoding="utf-8") as f:
             f.write(cache_whitelist_md)
-        print(f"  -> {platform}/cache/WHITELIST.md")
+        print(f"  -> build/{platform}/cache/WHITELIST.md")
 
         # 4. Cache FPC
         cache_fpc_md = build_cache_fpc(profile)
         with open(os.path.join(dest_cache, "FPC.md"), "w", encoding="utf-8") as f:
             f.write(cache_fpc_md)
-        print(f"  -> {platform}/cache/FPC.md")
+        print(f"  -> build/{platform}/cache/FPC.md")
 
     print("\nAll profiles successfully compiled!")
 

@@ -2,33 +2,36 @@
 
 Raccolta modulare e documentazione delle regole Cloudflare (WAF Custom Rules, Blocco Nazioni, Cache Rules / FPC e Bypass) ottimizzate per i principali CMS ed e-commerce:
 
-* **WooCommerce** (`woocommerce/`)
-* **WordPress** (`wordpress/`)
-* **Magento 1** (`magento1/`)
-* **Magento 2** (`magento2/`)
-* **PrestaShop** (`prestashop/`)
+* **WooCommerce** (`build/woocommerce/`)
+* **WordPress** (`build/wordpress/`)
+* **Magento 1** (`build/magento1/`)
+* **Magento 2** (`build/magento2/`)
+* **PrestaShop** (`build/prestashop/`)
 
 ---
 
 ## 🏗️ Architettura del Progetto
 
 Il repository segue un approccio **Infrastructure-as-Code modulare**:
-I file Markdown di documentazione nelle cartelle dei CMS **vengono generati automaticamente** a partire da componenti JSON riutilizzabili.
+I sorgenti JSON si trovano in `src/`, mentre i file Markdown pronti all'uso vengono generati automaticamente dentro `build/`.
 
 ```text
 cloudflare-rules/
-├── build.py                  # Script di compilazione Markdown
-├── src/
+├── build.py                  # Script di compilazione (da src/ verso build/)
+├── deploy.py                 # Script di deploy automatico su Cloudflare API
+│
+├── src/                      # SORGENTI (modificabili a mano)
 │   ├── rules/
 │   │   ├── waf/              # Regole WAF atomiche (doofinder.json, danea.json, ecc.)
 │   │   └── cache/            # Componenti di cache (fpc-everything.json, bypass per CMS)
 │   └── profiles/             # Profili CMS che richiamano i componenti (woocommerce.json, ecc.)
 │
-├── woocommerce/              # Markdown compilati pronti per la consultazione
-├── wordpress/
-├── magento1/
-├── magento2/
-└── prestashop/
+└── build/                    # FILE GENERATI (output Markdown pronti da consultare)
+    ├── woocommerce/
+    ├── wordpress/
+    ├── magento1/
+    ├── magento2/
+    └── prestashop/
 ```
 
 ---
