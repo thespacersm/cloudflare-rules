@@ -1,0 +1,8 @@
+{
+  "id": "trovaprezzi",
+  "name": "Path / Feed - Crawler / bot TrovaPrezzi",
+  "category": "Path / Feed",
+  "description": "Richieste provenienti dai crawler e spider di TrovaPrezzi per la sincronizzazione dei prezzi e delle offerte.",
+  "expression": "http.request.uri.path contains \"trovaprezzi\"",
+  "note": "Crawler / bot TrovaPrezzi"
+}

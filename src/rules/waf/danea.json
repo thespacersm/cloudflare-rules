@@ -1,0 +1,8 @@
+{
+  "id": "danea",
+  "name": "Gestionale - Sincronizzazione Danea Easyfatt",
+  "category": "Gestionale",
+  "description": "Chiamate del software gestionale Danea Easyfatt per l'aggiornamento automatico di catalogo, ordini e giacenze.",
+  "expression": "http.user_agent contains \"DaneaEasyfatt\"",
+  "note": "Sincronizzazione Danea Easyfatt"
+}

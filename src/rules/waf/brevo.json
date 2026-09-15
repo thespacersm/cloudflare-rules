@@ -1,0 +1,8 @@
+{
+  "id": "brevo",
+  "name": "Brevo (Sendinblue) WooCommerce",
+  "category": "Brevo / Email Marketing",
+  "description": "Integrazione ufficiale e webhook del plugin Brevo per l'invio di email transazionali e marketing automation.",
+  "expression": "http.user_agent contains \"Brevo-WC\" or http.request.uri.path contains \"/wp-json/sendinblue-woo/\"",
+  "note": "Integrazione e webhook Brevo WooCommerce"
+}

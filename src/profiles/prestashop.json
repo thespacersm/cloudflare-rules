@@ -1,0 +1,25 @@
+{
+  "platform": "prestashop",
+  "title": "PrestaShop",
+  "waf": {
+    "whitelist": [
+      "doofinder",
+      "java-payments",
+      "google-asn",
+      "google-bot",
+      "bing-bot",
+      "danea",
+      "uptime-kuma",
+      "static-images",
+      "feeds",
+      "trovaprezzi",
+      "doofinder-path",
+      "m2epro"
+    ],
+    "country_block": "country-block"
+  },
+  "cache": {
+    "bypass": "prestashop-bypass",
+    "fpc": "fpc-everything"
+  }
+}

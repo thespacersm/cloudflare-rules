@@ -1,0 +1,26 @@
+{
+  "platform": "wordpress",
+  "title": "WordPress",
+  "waf": {
+    "whitelist": [
+      "doofinder",
+      "java-payments",
+      "google-asn",
+      "google-bot",
+      "bing-bot",
+      "danea",
+      "uptime-kuma",
+      "static-images",
+      "feeds",
+      "trovaprezzi",
+      "doofinder-path",
+      "m2epro",
+      "jetpack"
+    ],
+    "country_block": "country-block"
+  },
+  "cache": {
+    "bypass": "wordpress-bypass",
+    "fpc": "fpc-everything"
+  }
+}

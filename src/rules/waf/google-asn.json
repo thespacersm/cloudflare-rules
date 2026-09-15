@@ -1,0 +1,8 @@
+{
+  "id": "google-asn",
+  "name": "ASN GOOGLE",
+  "category": "ASN",
+  "description": "Autonomous System Numbers (ASN) di Google e Google Cloud per garantire l'accesso a servizi, crawler e API di Google.",
+  "expression": "ip.src.asnum in {15169 396982}",
+  "note": "ASN Google / Google Cloud"
+}

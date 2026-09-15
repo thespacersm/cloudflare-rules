@@ -1,0 +1,28 @@
+{
+  "platform": "woocommerce",
+  "title": "WooCommerce",
+  "waf": {
+    "whitelist": [
+      "doofinder",
+      "java-payments",
+      "google-asn",
+      "google-bot",
+      "bing-bot",
+      "danea",
+      "uptime-kuma",
+      "static-images",
+      "feeds",
+      "trovaprezzi",
+      "doofinder-path",
+      "m2epro",
+      "woocommerce-core",
+      "jetpack",
+      "brevo"
+    ],
+    "country_block": "country-block"
+  },
+  "cache": {
+    "bypass": "woocommerce-bypass",
+    "fpc": "fpc-everything"
+  }
+}

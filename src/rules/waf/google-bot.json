@@ -1,0 +1,8 @@
+{
+  "id": "google-bot",
+  "name": "Bot Ufficiali - Crawler Google verificato",
+  "category": "Bot Ufficiali",
+  "description": "Crawler ufficiale Googlebot con verifica di autenticità gestita da Cloudflare Bot Management per l'indicizzazione SEO.",
+  "expression": "cf.client.bot and http.user_agent contains \"Google\"",
+  "note": "Crawler Google verificato"
+}

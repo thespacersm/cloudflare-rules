@@ -1,0 +1,8 @@
+{
+  "id": "woocommerce-core",
+  "name": "WooCommerce REST API & Sync",
+  "category": "WooCommerce API",
+  "description": "Accesso alle REST API native di WooCommerce per sincronizzazioni esterne con app, gestionali e servizi terzi.",
+  "expression": "http.user_agent contains \"WooCommerce\" or http.request.uri.path contains \"/wp-json/wc/\"",
+  "note": "Chiamate REST API WooCommerce"
+}

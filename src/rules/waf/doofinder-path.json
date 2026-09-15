@@ -1,0 +1,8 @@
+{
+  "id": "doofinder-path",
+  "name": "Path / Feed - Ricerca Doofinder",
+  "category": "Path / Feed",
+  "description": "Richieste verso endpoint di ricerca o feed specifici dedicati a Doofinder.",
+  "expression": "http.request.uri.path contains \"doofinder\"",
+  "note": "Ricerca Doofinder"
+}

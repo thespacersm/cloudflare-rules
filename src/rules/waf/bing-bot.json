@@ -1,0 +1,8 @@
+{
+  "id": "bing-bot",
+  "name": "Bot Ufficiali - Crawler Bing verificato",
+  "category": "Bot Ufficiali",
+  "description": "Crawler ufficiale Bingbot con verifica di autenticità gestita da Cloudflare Bot Management per l'indicizzazione SEO.",
+  "expression": "cf.client.bot and http.user_agent contains \"bingbot\"",
+  "note": "Crawler Bing verificato"
+}

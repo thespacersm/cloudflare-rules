@@ -1,9 +1,10 @@
 # CACHE WHITELIST (BYPASS CACHE) - MAGENTO 1
 
-Questa regola definisce tutte le richieste dinamiche, carrelli, sessioni cliente, cassa e backend di **Magento 1** che **NON devono essere cachate** da Cloudflare.
+Bypassa la cache per checkout, carrello, area cliente, adminhtml e sessione frontend di Magento 1.
 
 ### Posizione nella Ruleset
-Deve trovarsi **prima** della regola di FPC (priorità più alta).
+Nel motore Cache Rules di Cloudflare l'ultima regola che matcha sovrascrive le precedenti.
+Questa regola di bypass deve essere posizionata **dopo / sotto** la regola di FPC, in modo da avere priorità di override.
 
 ### Azione Cloudflare (Cache Rule)
 * **Eligible for cache**: `Bypass cache` (`cache: false`)
@@ -37,7 +38,7 @@ http.request.uri.path contains "/api/" or http.request.uri.path contains "/api/s
 ```
 
 #### 5. Cookie di Sessione Frontend e Carrello
-Il cookie `frontend` identifica univocamente la sessione del visitatore in Magento 1 non appena interagisce con il carrello o effettua il login.
+Il cookie frontend identifica univocamente la sessione del visitatore in Magento 1 non appena interagisce con il carrello o effettua il login.
 ```text
 http.cookie contains "frontend"
 ```
@@ -52,19 +53,19 @@ http.cookie contains "adminhtml"
 
 ### Tabella di Riepilogo
 
-| Ambito | Tipo | Condizione | Motivazione |
-| :--- | :--- | :--- | :--- |
-| **Carrello & Checkout** | Path | `http.request.uri.path contains "/checkout/" or "/onestepcheckout"` | Flusso transazionale e acquisto |
-| **Area Riservata** | Path | `http.request.uri.path contains "/customer/account"` | Dati personali e ordini del cliente |
-| **Backend Admin** | Path | `http.request.uri.path contains "/admin"` | Gestione catalogo e ordini |
-| **Integrazioni API** | Path | `http.request.uri.path contains "/api/" or "/oauth"` | Comunicazione con gestionali esterni |
-| **Sessione Utente** | Cookie | `http.cookie contains "frontend"` | Sessione attiva o articoli nel carrello |
-| **Sessione Admin** | Cookie | `http.cookie contains "adminhtml"` | Accesso operatore di backend |
+| Ambito | Condizione | Motivazione |
+| :--- | :--- | :--- |
+| **Carrello e Cassa (Standard e OneStepCheckout)** | `http.request.uri.path contains "/checkout/cart" or http.request.uri.path contains "/checkout/onepage" or http.request.uri.path contains "/onestepcheckout"` | Pagine di visualizzazione carrello e flussi di checkout standard o basati su estensioni (es. OneStepCheckout / Idev). |
+| **Area Cliente e Autenticazione** | `http.request.uri.path contains "/customer/account" or http.request.uri.path contains "/customer/account/login"` | Pagine di login, registrazione e dashboard personale del cliente (storico ordini, indirizzi, wishlist). |
+| **Pannello Amministrativo (Adminhtml)** | `http.request.uri.path contains "/admin" or http.request.uri.path contains "/index.php/admin"` | Area di backend Magento per la gestione del negozio e degli ordini. |
+| **API SOAP, XML-RPC e REST** | `http.request.uri.path contains "/api/" or http.request.uri.path contains "/api/soap" or http.request.uri.path contains "/api/rest" or http.request.uri.path contains "/oauth"` | Endpoint nativi di Magento per integrazioni gestionali, ERP e connettori esterni. |
+| **Cookie di Sessione Frontend e Carrello** | `http.cookie contains "frontend"` | Il cookie frontend identifica univocamente la sessione del visitatore in Magento 1 non appena interagisce con il carrello o effettua il login. |
+| **Cookie di Sessione Amministratore** | `http.cookie contains "adminhtml"` | Cookie generato all'accesso dell'amministratore nel pannello di controllo. |
 
 ---
 
 ### Espressione Completa (Bypass Cache)
 
 ```text
-(http.request.uri.path contains "/checkout/cart" or http.request.uri.path contains "/checkout/onepage" or http.request.uri.path contains "/onestepcheckout" or http.request.uri.path contains "/customer/account" or http.request.uri.path contains "/admin" or http.request.uri.path contains "/api/" or http.request.uri.path contains "/oauth" or http.cookie contains "frontend" or http.cookie contains "adminhtml")
+(http.request.uri.path contains "/checkout/cart" or http.request.uri.path contains "/checkout/onepage" or http.request.uri.path contains "/onestepcheckout") or (http.request.uri.path contains "/customer/account" or http.request.uri.path contains "/customer/account/login") or (http.request.uri.path contains "/admin" or http.request.uri.path contains "/index.php/admin") or (http.request.uri.path contains "/api/" or http.request.uri.path contains "/api/soap" or http.request.uri.path contains "/api/rest" or http.request.uri.path contains "/oauth") or (http.cookie contains "frontend") or (http.cookie contains "adminhtml")
 ```

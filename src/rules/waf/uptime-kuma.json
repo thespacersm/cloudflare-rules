@@ -1,0 +1,8 @@
+{
+  "id": "uptime-kuma",
+  "name": "Monitoraggio - Uptime Kuma probe",
+  "category": "Monitoraggio",
+  "description": "Sonda di monitoraggio Uptime Kuma per il controllo costante di disponibilità del sito e stato del server.",
+  "expression": "ip.src eq 49.12.69.209 and http.user_agent contains \"Kuma\"",
+  "note": "Uptime Kuma probe"
+}

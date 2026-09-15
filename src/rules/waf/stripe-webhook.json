@@ -1,0 +1,8 @@
+{
+  "id": "stripe-webhook",
+  "name": "Stripe - Webhook di Pagamento",
+  "category": "Pagamenti",
+  "description": "Notifiche webhook server-to-server inviate dai server Stripe con User-Agent ufficiale in formato POST.",
+  "expression": "http.request.method eq \"POST\" and starts_with(http.user_agent, \"Stripe/\") and (http.request.uri.path contains \"stripe\" or http.request.uri.query contains \"stripe\")",
+  "note": "Webhook ufficiali Stripe (POST con User-Agent Stripe/)"
+}

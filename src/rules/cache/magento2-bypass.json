@@ -1,0 +1,41 @@
+{
+  "id": "magento2-bypass",
+  "name": "Magento 2 Bypass",
+  "action": "set_cache_settings",
+  "action_parameters": {
+    "cache": false
+  },
+  "description": "Bypassa la cache per checkout, sezioni private AJAX, area cliente, admin, API e sessioni di Magento 2.",
+  "items": [
+    {
+      "title": "Carrello, Cassa e Flussi Checkout",
+      "desc": "Pagine dinamiche del carrello e del flusso di checkout standard o one-step.",
+      "expr": "http.request.uri.path contains \"/checkout\" or http.request.uri.path contains \"/onestepcheckout\""
+    },
+    {
+      "title": "Area Cliente e Dati Personali",
+      "desc": "Pagine di autenticazione e gestione account cliente.",
+      "expr": "http.request.uri.path contains \"/customer/account\" or http.request.uri.path contains \"/customer/account/login\""
+    },
+    {
+      "title": "Chiamate AJAX a Sezioni Private (Carrello Dinamico / User Info)",
+      "desc": "Endpoint fondamentale di Magento 2: customer/section/load carica via AJAX i blocchi privati (minicart, nome utente) sopra le pagine pubbliche cachate. Non deve MAI essere cachato.",
+      "expr": "http.request.uri.path contains \"/customer/section/load\""
+    },
+    {
+      "title": "Pannello di Controllo Amministrativo",
+      "desc": "Area di amministrazione backend (può trovarsi su /admin o su URL personalizzato generato all'installazione).",
+      "expr": "http.request.uri.path contains \"/admin\""
+    },
+    {
+      "title": "Endpoint REST API e GraphQL",
+      "desc": "Chiamate per frontend headless, app mobile, sync magazzino ed ERP.",
+      "expr": "http.request.uri.path contains \"/rest/\" or http.request.uri.path contains \"/graphql\""
+    },
+    {
+      "title": "Cookie di Sessione e Stato Privato Magento 2",
+      "desc": "Cookie generati per identificare sessioni PHP attive, chiavi CSRF del form o versioni del contenuto privato.",
+      "expr": "http.cookie contains \"PHPSESSID\" or http.cookie contains \"private_content_version\""
+    }
+  ]
+}

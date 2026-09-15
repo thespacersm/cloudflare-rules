@@ -1,6 +1,6 @@
 # FULL PAGE CACHE (FPC) - MAGENTO 1
 
-Questa regola definisce **COSA CACHARE** a livello di Edge Cloudflare. Nella logica a due regole, questa regola memorizza in cache **tutto il traffico pubblico** (homepage, categorie, schede prodotto, pagine CMS informative), poiché tutte le pagine dinamiche, carrelli e sessioni sono già state intercettate e skippate dalla regola precedente **Cache Whitelist (Bypass)**.
+Questa regola definisce **COSA CACHARE** a livello di Edge Cloudflare. Nella logica a due regole, questa regola memorizza in cache **tutto il traffico pubblico**, poiché tutte le pagine dinamiche, carrelli e sessioni sono già state intercettate e skippate dalla regola **Cache Whitelist (Bypass)**.
 
 ### Ordine di Esecuzione delle Regole (Cloudflare Cache Rules)
 Nel Ruleset Engine di Cloudflare per le Cache Rules, **l'ultima regola che matcha ha la precedenza** (sovrascrive le impostazioni delle precedenti).
@@ -8,9 +8,6 @@ Nel Ruleset Engine di Cloudflare per le Cache Rules, **l'ultima regola che match
 Pertanto, l'ordine di inserimento è:
 1. **Regola 1 (FPC - Cache Everything)**: abilita la cache su tutte le richieste pubbliche `http.request.method in {"GET" "HEAD"}`.
 2. **Regola 2 (Whitelist - Bypass Cache)**: posizionata **sotto/dopo** l'FPC, intercetta le eccezioni del CMS (carrello, admin, login, cookie) e imposta `Bypass cache` (`cache: false`), sovrascrivendo l'FPC.
-
-1. **Regola 1 (Priorità 1 - Bypass)**: definita in [`WHITELIST.md`](./WHITELIST.md), esclude carrello, checkout, account utente, admin, API e cookie di sessione.
-2. **Regola 2 (Priorità 2 - FPC Tutto)**: questa regola, memorizza in cache tutto il traffico di navigazione rimanente.
 
 ---
 
@@ -40,5 +37,5 @@ http.request.method in {"GET" "HEAD"}
 Se preferisci creare una sola regola anziché due separate, puoi inserire le esclusioni direttamente nell'FPC:
 
 ```text
-(http.request.method in {"GET" "HEAD"} and not (http.request.uri.path contains "/checkout/cart" or http.request.uri.path contains "/checkout/onepage" or http.request.uri.path contains "/onestepcheckout" or http.request.uri.path contains "/customer/account" or http.request.uri.path contains "/admin" or http.request.uri.path contains "/api/" or http.request.uri.path contains "/oauth" or http.cookie contains "frontend" or http.cookie contains "adminhtml"))
+(http.request.method in {"GET" "HEAD"} and not (http.request.uri.path contains "/checkout/cart" or http.request.uri.path contains "/checkout/onepage" or http.request.uri.path contains "/onestepcheckout" or http.request.uri.path contains "/customer/account" or http.request.uri.path contains "/customer/account/login" or http.request.uri.path contains "/admin" or http.request.uri.path contains "/index.php/admin" or http.request.uri.path contains "/api/" or http.request.uri.path contains "/api/soap" or http.request.uri.path contains "/api/rest" or http.request.uri.path contains "/oauth" or http.cookie contains "frontend" or http.cookie contains "adminhtml"))
 ```

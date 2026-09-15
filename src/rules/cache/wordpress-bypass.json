@@ -1,0 +1,31 @@
+{
+  "id": "wordpress-bypass",
+  "name": "WordPress Core Bypass",
+  "action": "set_cache_settings",
+  "action_parameters": {
+    "cache": false
+  },
+  "description": "Bypassa la cache per pannello di controllo WordPress, login, API e sessioni utente loggato.",
+  "items": [
+    {
+      "title": "Amministrazione WordPress & Login",
+      "desc": "Pannello di controllo WordPress e pagina di login amministrativo che richiedono sempre elaborazione dinamica.",
+      "expr": "http.request.uri.path contains \"/wp-admin\" or http.request.uri.path contains \"/wp-login\""
+    },
+    {
+      "title": "Endpoint REST API & XML-RPC",
+      "desc": "Chiamate REST API e interfacce XML-RPC che richiedono risposte sempre aggiornate.",
+      "expr": "http.request.uri.path contains \"/wp-json\" or http.request.uri.path contains \"/xmlrpc.php\""
+    },
+    {
+      "title": "Cookie Utente Autenticato WordPress",
+      "desc": "Cookie generato all'autenticazione dell'utente per mostrare la barra di amministrazione e contenuti riservati.",
+      "expr": "http.cookie contains \"wordpress_logged_in_\""
+    },
+    {
+      "title": "Cookie Autore Commenti",
+      "desc": "Cookie memorizzato quando un visitatore lascia un commento per compilare automaticamente i campi.",
+      "expr": "http.cookie contains \"comment_author_\""
+    }
+  ]
+}

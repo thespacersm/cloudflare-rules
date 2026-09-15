@@ -1,0 +1,8 @@
+{
+  "id": "jetpack",
+  "name": "Automattic / Jetpack / WordPress.com",
+  "category": "Automattic / Jetpack",
+  "description": "Rete e servizi cloud di Automattic (AS2635) per sincronizzazione Jetpack, backup, statistiche e CDN.",
+  "expression": "(ip.src.asnum eq 2635) or (http.user_agent contains \"Jetpack\") or (http.user_agent contains \"WordPress.com\") or (http.request.uri.path contains \"/wp-json/jetpack/\")",
+  "note": "Servizi e sincronizzazione Jetpack / WordPress.com (AS2635)"
+}

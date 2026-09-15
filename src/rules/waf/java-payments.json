@@ -1,0 +1,8 @@
+{
+  "id": "java-payments",
+  "name": "PAGAMENTI JAVA (TRIVENETO, NEXI, ECC.)",
+  "category": "Pagamenti",
+  "description": "Chiamate di notifica/callback server-to-server dei gateway di pagamento bancari (es. Consorzio Triveneto, Nexi) effettuate tramite client Java da IP italiano.",
+  "expression": "http.user_agent contains \"Java\" and ip.src.country eq \"IT\"",
+  "note": "Callback gateway bancari Java da IP italiano (es. Consorzio Triveneto, Nexi)"
+}

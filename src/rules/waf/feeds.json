@@ -1,0 +1,8 @@
+{
+  "id": "feeds",
+  "name": "Path / Feed - Feed prodotti",
+  "category": "Path / Feed",
+  "description": "Endpoint URL dedicati all'esportazione dei feed prodotti verso comparatori e aggregatori di vendita.",
+  "expression": "http.request.uri.path contains \"feed\"",
+  "note": "Feed prodotti"
+}

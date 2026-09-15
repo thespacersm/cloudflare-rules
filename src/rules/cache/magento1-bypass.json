@@ -1,0 +1,41 @@
+{
+  "id": "magento1-bypass",
+  "name": "Magento 1 Bypass",
+  "action": "set_cache_settings",
+  "action_parameters": {
+    "cache": false
+  },
+  "description": "Bypassa la cache per checkout, carrello, area cliente, adminhtml e sessione frontend di Magento 1.",
+  "items": [
+    {
+      "title": "Carrello e Cassa (Standard e OneStepCheckout)",
+      "desc": "Pagine di visualizzazione carrello e flussi di checkout standard o basati su estensioni (es. OneStepCheckout / Idev).",
+      "expr": "http.request.uri.path contains \"/checkout/cart\" or http.request.uri.path contains \"/checkout/onepage\" or http.request.uri.path contains \"/onestepcheckout\""
+    },
+    {
+      "title": "Area Cliente e Autenticazione",
+      "desc": "Pagine di login, registrazione e dashboard personale del cliente (storico ordini, indirizzi, wishlist).",
+      "expr": "http.request.uri.path contains \"/customer/account\" or http.request.uri.path contains \"/customer/account/login\""
+    },
+    {
+      "title": "Pannello Amministrativo (Adminhtml)",
+      "desc": "Area di backend Magento per la gestione del negozio e degli ordini.",
+      "expr": "http.request.uri.path contains \"/admin\" or http.request.uri.path contains \"/index.php/admin\""
+    },
+    {
+      "title": "API SOAP, XML-RPC e REST",
+      "desc": "Endpoint nativi di Magento per integrazioni gestionali, ERP e connettori esterni.",
+      "expr": "http.request.uri.path contains \"/api/\" or http.request.uri.path contains \"/api/soap\" or http.request.uri.path contains \"/api/rest\" or http.request.uri.path contains \"/oauth\""
+    },
+    {
+      "title": "Cookie di Sessione Frontend e Carrello",
+      "desc": "Il cookie frontend identifica univocamente la sessione del visitatore in Magento 1 non appena interagisce con il carrello o effettua il login.",
+      "expr": "http.cookie contains \"frontend\""
+    },
+    {
+      "title": "Cookie di Sessione Amministratore",
+      "desc": "Cookie generato all'accesso dell'amministratore nel pannello di controllo.",
+      "expr": "http.cookie contains \"adminhtml\""
+    }
+  ]
+}

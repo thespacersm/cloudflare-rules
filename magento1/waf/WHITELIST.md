@@ -1,4 +1,4 @@
-# WAF WHITELIST - MAGENTO1
+# WAF WHITELIST - MAGENTO 1
 
 ### Azione
 `Skip`

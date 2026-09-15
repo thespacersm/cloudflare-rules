@@ -1,0 +1,8 @@
+{
+  "id": "m2epro",
+  "name": "Path / Sync - Connector eBay / Amazon M2E Pro",
+  "category": "Path / Sync",
+  "description": "Chiamate API del connettore M2E Pro per la sincronizzazione dei marketplace Amazon ed eBay.",
+  "expression": "http.request.uri.path contains \"M2ePro\"",
+  "note": "Connector eBay / Amazon M2E Pro"
+}

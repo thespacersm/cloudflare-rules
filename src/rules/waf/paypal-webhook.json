@@ -1,0 +1,8 @@
+{
+  "id": "paypal-webhook",
+  "name": "PayPal - IPN & Webhook di Pagamento",
+  "category": "Pagamenti",
+  "description": "Chiamate POST di notifica IPN e Webhook REST inviate dai server PayPal con User-Agent proprietario.",
+  "expression": "http.request.method eq \"POST\" and http.user_agent contains \"PayPal\" and (http.request.uri.path contains \"paypal\" or http.request.uri.query contains \"paypal\")",
+  "note": "Notifiche IPN e webhook PayPal (POST con User-Agent PayPal)"
+}

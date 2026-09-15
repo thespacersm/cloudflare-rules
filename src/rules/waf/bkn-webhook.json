@@ -1,0 +1,8 @@
+{
+  "id": "bkn-webhook",
+  "name": "BKN301 - Notifiche Gateway Bancario",
+  "category": "Pagamenti",
+  "description": "Notifiche server-to-server di conferma transazione dai gateway BKN301 (Banca di San Marino) inviate via POST da IP italiani o sammarinesi.",
+  "expression": "http.request.method eq \"POST\" and ip.src.country in {\"SM\" \"IT\"} and http.request.uri.path contains \"bkn\"",
+  "note": "Notifiche server BKN301 (POST da IT/SM)"
+}

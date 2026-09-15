@@ -1,0 +1,8 @@
+{
+  "id": "doofinder",
+  "name": "DOOFINDER CRAWLER (IP EU, USA, ASIA)",
+  "category": "Doofinder",
+  "description": "Indirizzi IP ufficiali dei server e crawler Doofinder utilizzati per scaricare il catalogo e indicizzare i prodotti nella barra di ricerca.",
+  "expression": "ip.src in {54.171.4.216 52.2.218.41 18.143.220.25}",
+  "note": "Crawler Doofinder (EU, USA, ASIA) per indicizzazione catalogo"
+}

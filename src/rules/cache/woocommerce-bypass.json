@@ -1,0 +1,41 @@
+{
+  "id": "woocommerce-bypass",
+  "name": "WooCommerce Bypass",
+  "action": "set_cache_settings",
+  "action_parameters": {
+    "cache": false
+  },
+  "description": "Bypassa la cache per carrello, cassa, account cliente, API WooCommerce e cookie di sessione carrello.",
+  "items": [
+    {
+      "title": "Carrello, Cassa e Account Utente (IT & EN)",
+      "desc": "Pagine dinamiche e personalizzate per ogni cliente contenenti carrello, checkout e dashboard account, sia in lingua italiana che inglese.",
+      "expr": "http.request.uri.path contains \"/cart\" or http.request.uri.path contains \"/checkout\" or http.request.uri.path contains \"/my-account\" or http.request.uri.path contains \"/carrello\" or http.request.uri.path contains \"/cassa\" or http.request.uri.path contains \"/mio-account\""
+    },
+    {
+      "title": "Amministrazione WordPress & Login",
+      "desc": "Pannello di controllo WordPress e pagina di login amministrativo che richiedono sempre elaborazione dinamica.",
+      "expr": "http.request.uri.path contains \"/wp-admin\" or http.request.uri.path contains \"/wp-login\""
+    },
+    {
+      "title": "Endpoint API, Webhook e XML-RPC",
+      "desc": "Chiamate REST API, webhook di pagamento, interfacce XML-RPC e addon WooCommerce che devono scambiare dati in tempo reale.",
+      "expr": "http.request.uri.path contains \"/wp-json\" or http.request.uri.path contains \"/wc-api\" or http.request.uri.path contains \"/xmlrpc.php\" or http.request.uri.path contains \"/addons\""
+    },
+    {
+      "title": "Query String di Carrello",
+      "desc": "Parametri GET utilizzati da WooCommerce per l'aggiunta diretta di prodotti al carrello via URL.",
+      "expr": "http.request.uri.query contains \"add-to-cart\""
+    },
+    {
+      "title": "Cookie di Sessione Carrello WooCommerce",
+      "desc": "Cookie rilasciati da WooCommerce non appena un utente aggiunge un prodotto al carrello, necessari per non mostrare pagine cachate con carrello vuoto.",
+      "expr": "http.cookie contains \"woocommerce_items_in_cart\" or http.cookie contains \"woocommerce_cart_hash\" or http.cookie contains \"wp_woocommerce_session_\""
+    },
+    {
+      "title": "Cookie Utente Loggato WordPress",
+      "desc": "Cookie generato all'autenticazione dell'utente (cliente o amministratore) per mostrare barre personalizzate e contenuti riservati.",
+      "expr": "http.cookie contains \"wordpress_logged_in_\""
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "id": "prestashop-bypass",
+  "name": "PrestaShop Bypass",
+  "action": "set_cache_settings",
+  "action_parameters": {
+    "cache": false
+  },
+  "description": "Bypassa la cache per carrello, ordine, account cliente, back office e sessioni PrestaShop.",
+  "items": [
+    {
+      "title": "Carrello e Checkout (Multilingua)",
+      "desc": "Pagine di visualizzazione carrello, step di ordinazione e conferma acquisto nelle diverse lingue supportate (IT, EN, FR, ES).",
+      "expr": "http.request.uri.path contains \"/cart\" or http.request.uri.path contains \"/carrello\" or http.request.uri.path contains \"/panier\" or http.request.uri.path contains \"/order\" or http.request.uri.path contains \"/ordine\" or http.request.uri.path contains \"/commande\" or http.request.uri.path contains \"/order-confirmation\""
+    },
+    {
+      "title": "Area Cliente e Login",
+      "desc": "Pagine di autenticazione, recupero password e pannello dell'account cliente.",
+      "expr": "http.request.uri.path contains \"/my-account\" or http.request.uri.path contains \"/mio-account\" or http.request.uri.path contains \"/mon-compte\" or http.request.uri.path contains \"/login\" or http.request.uri.path contains \"/autenticazione\" or http.request.uri.path contains \"/authentication\""
+    },
+    {
+      "title": "Back Office Amministrazione",
+      "desc": "Pannello di controllo PrestaShop (normalmente collocato in una sottocartella /admin o con suffisso casuale es. /admin1234/).",
+      "expr": "http.request.uri.path contains \"/admin\""
+    },
+    {
+      "title": "WebService API e Moduli di Pagamento",
+      "desc": "API REST native di PrestaShop e chiamate AJAX/webhook gestite dai moduli (es. pagamenti o corrieri).",
+      "expr": "http.request.uri.path contains \"/api/\" or http.request.uri.path contains \"/module/\""
+    },
+    {
+      "title": "Cookie di Sessione PrestaShop",
+      "desc": "Cookie univoco di sessione generato da PrestaShop (inizia sempre per PrestaShop- seguito dall'hash dell'installazione) che mantiene il carrello e lo stato dell'utente.",
+      "expr": "http.cookie contains \"PrestaShop-\""
+    }
+  ]
+}
