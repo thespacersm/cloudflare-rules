@@ -84,3 +84,25 @@ L'ordine corretto di configurazione su Cloudflare è:
 2. **Regola 2: `CACHE WHITELIST (Bypass Cache)`** *(sotto la regola 1)*
    * Condizione: percorsi dinamici del CMS (carrello, checkout, account, admin, API) e cookie di sessione attiva.
    * Azione: `Bypass cache` (`cache: false`).
+
+---
+
+## 🚀 Deploy Automatico su Cloudflare (`deploy.py`)
+
+Puoi applicare direttamente le regole WAF e Cache su qualsiasi dominio Cloudflare via API senza doverle incollare a mano:
+
+```bash
+# Deploy completo (WAF + Cache) su un dominio
+python3 deploy.py --zone elidelagenzia.com --profile wordpress
+
+# Deploy su WooCommerce
+python3 deploy.py --zone miostore.it --profile woocommerce
+
+# Solo regole WAF o solo Cache
+python3 deploy.py --zone miostore.it --profile prestashop --waf-only
+python3 deploy.py --zone miostore.it --profile prestashop --cache-only
+
+# Simulazione (dry-run) per vedere il JSON inviato a Cloudflare
+python3 deploy.py --zone miostore.it --profile magento2 --dry-run
+```
+
