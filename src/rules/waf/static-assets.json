@@ -1,5 +1,5 @@
 {
-  "id": "static-images",
+  "id": "static-assets",
   "name": "Estensioni Asset Statici (CSS, JS, Media)",
   "category": "File Statici",
   "description": "Bypass delle regole di blocco per fogli di stile, script, asset grafici e file multimediali, garantendo il caricamento fluido delle risorse e l'assenza di blocchi CDN.",
