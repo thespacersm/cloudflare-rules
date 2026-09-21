@@ -1,0 +1,8 @@
+{
+  "id": "meta-bot",
+  "name": "Bot Ufficiali - Meta / Facebook Crawler",
+  "category": "Bot Ufficiali",
+  "description": "Crawler e spider ufficiali verificati da Cloudflare appartenenti all'ecosistema Meta (Facebook OpenGraph, anteprime social WhatsApp e cataloghi Instagram Shopping).",
+  "expression": "(cf.client.bot and http.user_agent contains \"facebook\") or (cf.client.bot and http.user_agent contains \"meta\")",
+  "note": "Crawler Meta / Facebook verificati"
+}

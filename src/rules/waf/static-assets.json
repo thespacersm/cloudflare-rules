@@ -3,6 +3,6 @@
   "name": "Estensioni Asset Statici (CSS, JS, Media)",
   "category": "File Statici",
   "description": "Bypass delle regole di blocco per fogli di stile, script, asset grafici e file multimediali, garantendo il caricamento fluido delle risorse e l'assenza di blocchi CDN.",
-  "expression": "ends_with(http.request.uri.path, \".jpg\") or ends_with(http.request.uri.path, \".jpeg\") or ends_with(http.request.uri.path, \".png\") or ends_with(http.request.uri.path, \".webp\") or ends_with(http.request.uri.path, \".gif\") or ends_with(http.request.uri.path, \".svg\") or ends_with(http.request.uri.path, \".ico\") or ends_with(http.request.uri.path, \".avif\") or ends_with(http.request.uri.path, \".css\") or ends_with(http.request.uri.path, \".js\")",
+  "expression": "ends_with(http.request.uri.path, \".jpg\") or ends_with(http.request.uri.path, \".jpeg\") or ends_with(http.request.uri.path, \".png\") or ends_with(http.request.uri.path, \".webp\") or ends_with(http.request.uri.path, \".gif\") or ends_with(http.request.uri.path, \".svg\") or ends_with(http.request.uri.path, \".ico\") or ends_with(http.request.uri.path, \".avif\") or ends_with(http.request.uri.path, \".bmp\") or ends_with(http.request.uri.path, \".tif\") or ends_with(http.request.uri.path, \".tiff\") or ends_with(http.request.uri.path, \".css\") or ends_with(http.request.uri.path, \".js\")",
   "note": "Bypass per CSS, JS, immagini e asset statici"
 }

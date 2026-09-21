@@ -2,7 +2,7 @@
   "id": "bing-bot",
   "name": "Bot Ufficiali - Crawler Bing verificato",
   "category": "Bot Ufficiali",
-  "description": "Crawler ufficiale Bingbot con verifica di autenticità gestita da Cloudflare Bot Management per l'indicizzazione SEO.",
-  "expression": "cf.client.bot and http.user_agent contains \"bingbot\"",
-  "note": "Crawler Bing verificato"
+  "description": "Crawler ufficiale Bingbot con verifica di autenticità gestita da Cloudflare Bot Management per l'indicizzazione SEO (con esclusione di catalogsearch per prevenire flood del motore di ricerca).",
+  "expression": "cf.client.bot and http.user_agent contains \"bingbot\" and not http.request.uri.path contains \"catalogsearch\"",
+  "note": "Crawler Bing verificato (escluso catalogsearch)"
 }
