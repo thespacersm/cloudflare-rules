@@ -15,7 +15,10 @@
       "trovaprezzi",
       "doofinder-path",
       "m2epro",
-      "windsor-ai"
+      "windsor-ai",
+      "paypal-webhook",
+      "stripe-webhook",
+      "bkn-webhook"
     ],
     "blacklist": "blacklist-magento2"
   },

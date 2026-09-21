@@ -88,6 +88,24 @@ Chiamate API REST del connettore Windsor.ai per sincronizzazione dati e reportis
 http.request.uri.path contains "/rest/" and http.user_agent eq "Windsor/1.0"
 ```
 
+#### PayPal - IPN & Webhook di Pagamento
+Chiamate POST di notifica IPN e Webhook REST inviate dai server PayPal con User-Agent proprietario.
+```text
+http.request.method eq "POST" and http.user_agent contains "PayPal" and (http.request.uri.path contains "paypal" or http.request.uri.query contains "paypal")
+```
+
+#### Stripe - Webhook di Pagamento
+Notifiche webhook server-to-server inviate dai server Stripe con User-Agent ufficiale in formato POST.
+```text
+http.request.method eq "POST" and starts_with(http.user_agent, "Stripe/") and (http.request.uri.path contains "stripe" or http.request.uri.query contains "stripe")
+```
+
+#### BKN301 - Notifiche Gateway Bancario
+Notifiche server-to-server di conferma transazione dai gateway BKN301 (Banca di San Marino) inviate via POST da IP italiani o sammarinesi.
+```text
+http.request.method eq "POST" and ip.src.country in {"SM" "IT"} and http.request.uri.path contains "bkn"
+```
+
 ---
 
 ### Tabella di Riepilogo
@@ -107,11 +125,14 @@ http.request.uri.path contains "/rest/" and http.user_agent eq "Windsor/1.0"
 | **Path / Feed** | `http.request.uri.path contains "doofinder"` | Ricerca Doofinder |
 | **Path / Sync** | `http.request.uri.path contains "M2ePro"` | Connector eBay / Amazon M2E Pro |
 | **Sync / API** | `http.request.uri.path contains "/rest/" and http.user_agent eq "Windsor/1.0"` | Connettore REST Windsor.ai |
+| **Pagamenti** | `http.request.method eq "POST" and http.user_agent contains "PayPal" and (http.request.uri.path contains "paypal" or http.request.uri.query contains "paypal")` | Notifiche IPN e webhook PayPal (POST con User-Agent PayPal) |
+| **Pagamenti** | `http.request.method eq "POST" and starts_with(http.user_agent, "Stripe/") and (http.request.uri.path contains "stripe" or http.request.uri.query contains "stripe")` | Webhook ufficiali Stripe (POST con User-Agent Stripe/) |
+| **Pagamenti** | `http.request.method eq "POST" and ip.src.country in {"SM" "IT"} and http.request.uri.path contains "bkn"` | Notifiche server BKN301 (POST da IT/SM) |
 
 ---
 
 ### Espressione Completa (Cloudflare Expression Builder)
 
 ```text
-(ip.src in {54.171.4.216 52.2.218.41 18.143.220.25}) or (http.user_agent contains "Java" and ip.src.country eq "IT") or (ip.src.asnum in {15169 396982}) or (cf.client.bot and http.user_agent contains "Google") or (cf.client.bot and http.user_agent contains "bingbot") or (http.user_agent contains "DaneaEasyfatt") or (ip.src eq 49.12.69.209 and http.user_agent contains "Kuma") or (ends_with(http.request.uri.path, ".jpg") or ends_with(http.request.uri.path, ".jpeg") or ends_with(http.request.uri.path, ".png") or ends_with(http.request.uri.path, ".webp") or ends_with(http.request.uri.path, ".gif") or ends_with(http.request.uri.path, ".svg") or ends_with(http.request.uri.path, ".ico") or ends_with(http.request.uri.path, ".avif")) or (http.request.uri.path contains "feed") or (http.request.uri.path contains "trovaprezzi") or (http.request.uri.path contains "doofinder") or (http.request.uri.path contains "M2ePro") or (http.request.uri.path contains "/rest/" and http.user_agent eq "Windsor/1.0")
+(ip.src in {54.171.4.216 52.2.218.41 18.143.220.25}) or (http.user_agent contains "Java" and ip.src.country eq "IT") or (ip.src.asnum in {15169 396982}) or (cf.client.bot and http.user_agent contains "Google") or (cf.client.bot and http.user_agent contains "bingbot") or (http.user_agent contains "DaneaEasyfatt") or (ip.src eq 49.12.69.209 and http.user_agent contains "Kuma") or (ends_with(http.request.uri.path, ".jpg") or ends_with(http.request.uri.path, ".jpeg") or ends_with(http.request.uri.path, ".png") or ends_with(http.request.uri.path, ".webp") or ends_with(http.request.uri.path, ".gif") or ends_with(http.request.uri.path, ".svg") or ends_with(http.request.uri.path, ".ico") or ends_with(http.request.uri.path, ".avif")) or (http.request.uri.path contains "feed") or (http.request.uri.path contains "trovaprezzi") or (http.request.uri.path contains "doofinder") or (http.request.uri.path contains "M2ePro") or (http.request.uri.path contains "/rest/" and http.user_agent eq "Windsor/1.0") or (http.request.method eq "POST" and http.user_agent contains "PayPal" and (http.request.uri.path contains "paypal" or http.request.uri.query contains "paypal")) or (http.request.method eq "POST" and starts_with(http.user_agent, "Stripe/") and (http.request.uri.path contains "stripe" or http.request.uri.query contains "stripe")) or (http.request.method eq "POST" and ip.src.country in {"SM" "IT"} and http.request.uri.path contains "bkn")
 ```
