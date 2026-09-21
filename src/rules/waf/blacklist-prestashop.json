@@ -1,8 +1,8 @@
 {
   "id": "blacklist-prestashop",
   "name": "BLACKLIST",
-  "action": "interactive_challenge",
-  "action_label": "Verifica interattiva (Interactive Challenge)",
+  "action": "managed_challenge",
+  "action_label": "Verifica interattiva (Managed Challenge)",
   "description": "Richiede una Verifica Interattiva (Cloudflare Turnstile) per tutti i visitatori con geolocalizzazione IP esterna ad Italia (IT), San Marino (SM) e Città del Vaticano (VA).",
   "expression": "(not ip.src.country in {\"IT\" \"SM\" \"VA\"})",
   "conditions": [

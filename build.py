@@ -72,7 +72,7 @@ def build_waf_blacklist(profile):
 
     md = f"# BLACKLIST - {title}\n\n"
     md += "### Azione Cloudflare (WAF Custom Rule)\n"
-    md += f"* **Azione**: `{rule.get('action_label', 'Verifica interattiva (Interactive Challenge)')}` (`action: {rule.get('action', 'interactive_challenge')}`)\n\n"
+    md += f"* **Azione**: `{rule.get('action_label', 'Verifica interattiva (Managed Challenge)')}` (`action: {rule.get('action', 'managed_challenge')}`)\n\n"
     md += f"### Descrizione\n{rule['description']}\n\n"
     md += "---\n\n"
     md += "### Condizioni Dettagliate con Commenti\n\n"

@@ -1,7 +1,7 @@
 # BLACKLIST - PRESTASHOP
 
 ### Azione Cloudflare (WAF Custom Rule)
-* **Azione**: `Verifica interattiva (Interactive Challenge)` (`action: interactive_challenge`)
+* **Azione**: `Verifica interattiva (Managed Challenge)` (`action: managed_challenge`)
 
 ### Descrizione
 Richiede una Verifica Interattiva (Cloudflare Turnstile) per tutti i visitatori con geolocalizzazione IP esterna ad Italia (IT), San Marino (SM) e Città del Vaticano (VA).

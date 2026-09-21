@@ -109,7 +109,7 @@ def build_waf_payload(profile, zone_name=""):
                 }
             },
             {
-                "action": bl_rule.get("action", "interactive_challenge"),
+                "action": bl_rule.get("action", "managed_challenge"),
                 "description": bl_rule.get("name", "BLACKLIST"),
                 "enabled": True,
                 "expression": bl_expr
