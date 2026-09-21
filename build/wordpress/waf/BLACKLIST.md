@@ -1,23 +1,17 @@
 # BLACKLIST - WORDPRESS
 
 ### Azione Cloudflare (WAF Custom Rule)
-* **Azione**: `Verifica interattiva (Managed Challenge)` (`action: managed_challenge`)
+* **Azione**: `Blocco (Block 403)` (`action: block`)
 
 ### Descrizione
-Richiede una Verifica Interattiva (Cloudflare Turnstile) per tutti i visitatori con geolocalizzazione IP esterna ad Italia (IT), San Marino (SM) e Città del Vaticano (VA), oppure per richieste alla ricerca interna prive di referer.
+Blocco immediato (403) per richieste alla ricerca interna (?s= o /search/) prive di referer interno valido.
 
 ---
 
 ### Condizioni Dettagliate con Commenti
 
-#### Blocco Nazioni Estere
-Sfida con verifica interattiva tutti i visitatori provenienti da paesi diversi da Italia, San Marino e Città del Vaticano.
-```text
-not ip.src.country in {"IT" "SM" "VA"}
-```
-
-#### Ricerca senza Referer
-Sfida con verifica interattiva chiunque invochi la ricerca interna WordPress senza referer.
+#### Ricerca WordPress senza Referer Interno
+Blocca chiamate dirette alla ricerca WordPress (?s= o /search/) prive di referer del sito.
 ```text
 (http.request.uri.query contains "s=" or http.request.uri.path contains "/search/") and (http.referer eq "" or not http.referer contains "{DOMAIN}")
 ```
@@ -30,5 +24,5 @@ Sfida con verifica interattiva chiunque invochi la ricerca interna WordPress sen
 > Sostituisci `{DOMAIN}` con il dominio effettivo del sito (es. `mysite.com`).
 
 ```text
-(not ip.src.country in {"IT" "SM" "VA"}) or ((http.request.uri.query contains "s=" or http.request.uri.path contains "/search/") and (http.referer eq "" or not http.referer contains "{DOMAIN}"))
+(http.request.uri.query contains "s=" or http.request.uri.path contains "/search/") and (http.referer eq "" or not http.referer contains "{DOMAIN}")
 ```

@@ -72,50 +72,63 @@ def build_waf_payload(profile, zone_name=""):
 
     whitelist_expr = " or ".join([f"({r['expression']})" for r in rules])
 
-    bl_id = profile["waf"].get("blacklist", f"blacklist-{profile['platform']}")
-    bl_path = os.path.join(RULES_DIR, "waf", f"{bl_id}.json")
-    bl_rule = load_json(bl_path)
-
-    bl_expr = bl_rule["expression"]
-    if zone_name:
-        bl_expr = bl_expr.replace("{DOMAIN}", zone_name)
-
-    return {
-        "rules": [
-            {
-                "action": "skip",
-                "action_parameters": {
-                    "phases": [
-                        "http_ratelimit",
-                        "http_request_firewall_managed",
-                        "http_request_sbfm"
-                    ],
-                    "products": [
-                        "bic",
-                        "zoneLockdown",
-                        "rateLimit",
-                        "waf",
-                        "securityLevel",
-                        "hot",
-                        "uaBlock"
-                    ],
-                    "ruleset": "current"
-                },
-                "description": f"WHITELIST - {title}",
-                "enabled": True,
-                "expression": whitelist_expr,
-                "logging": {
-                    "enabled": True
-                }
+    waf_rules = [
+        {
+            "action": "skip",
+            "action_parameters": {
+                "phases": [
+                    "http_ratelimit",
+                    "http_request_firewall_managed",
+                    "http_request_sbfm"
+                ],
+                "products": [
+                    "bic",
+                    "zoneLockdown",
+                    "rateLimit",
+                    "waf",
+                    "securityLevel",
+                    "hot",
+                    "uaBlock"
+                ],
+                "ruleset": "current"
             },
-            {
-                "action": bl_rule.get("action", "managed_challenge"),
-                "description": f"BLACKLIST - {title}",
-                "enabled": True,
-                "expression": bl_expr
+            "description": f"WHITELIST - {title}",
+            "enabled": True,
+            "expression": whitelist_expr,
+            "logging": {
+                "enabled": True
             }
-        ]
-    }
+        }
+    ]
+
+    # 2. VERIFYLIST (Countries challenge)
+    if "verifylist" in profile["waf"]:
+        vl_id = profile["waf"]["verifylist"]
+        vl_path = os.path.join(RULES_DIR, "waf", f"{vl_id}.json")
+        vl_rule = load_json(vl_path)
+        waf_rules.append({
+            "action": vl_rule.get("action", "managed_challenge"),
+            "description": f"VERIFYLIST - {title}",
+            "enabled": True,
+            "expression": vl_rule["expression"]
+        })
+
+    # 3. BLACKLIST (Referer & Search block 403)
+    if "blacklist" in profile["waf"]:
+        bl_id = profile["waf"]["blacklist"]
+        bl_path = os.path.join(RULES_DIR, "waf", f"{bl_id}.json")
+        bl_rule = load_json(bl_path)
+        bl_expr = bl_rule["expression"]
+        if zone_name:
+            bl_expr = bl_expr.replace("{DOMAIN}", zone_name)
+        waf_rules.append({
+            "action": bl_rule.get("action", "block"),
+            "description": f"BLACKLIST - {title}",
+            "enabled": True,
+            "expression": bl_expr
+        })
+
+    return {"rules": waf_rules}
 
 
 def build_cache_payload(profile):

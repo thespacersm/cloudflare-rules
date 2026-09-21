@@ -20,6 +20,7 @@
       "stripe-webhook",
       "bkn-webhook"
     ],
+    "verifylist": "verifylist-countries",
     "blacklist": "blacklist-magento2"
   },
   "cache": {

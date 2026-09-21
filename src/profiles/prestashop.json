@@ -16,6 +16,7 @@
       "doofinder-path",
       "m2epro"
     ],
+    "verifylist": "verifylist-countries",
     "blacklist": "blacklist-prestashop"
   },
   "cache": {

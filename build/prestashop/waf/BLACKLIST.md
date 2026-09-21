@@ -1,25 +1,28 @@
 # BLACKLIST - PRESTASHOP
 
 ### Azione Cloudflare (WAF Custom Rule)
-* **Azione**: `Verifica interattiva (Managed Challenge)` (`action: managed_challenge`)
+* **Azione**: `Blocco (Block 403)` (`action: block`)
 
 ### Descrizione
-Richiede una Verifica Interattiva (Cloudflare Turnstile) per tutti i visitatori con geolocalizzazione IP esterna ad Italia (IT), San Marino (SM) e Città del Vaticano (VA).
+Blocco immediato (403) per richieste alla ricerca e filtri PrestaShop (controller=search o ?s=) prive di referer interno valido.
 
 ---
 
 ### Condizioni Dettagliate con Commenti
 
-#### Blocco Nazioni Estere
-Sfida con verifica interattiva tutti i visitatori provenienti da paesi diversi da Italia, San Marino e Città del Vaticano.
+#### Ricerca PrestaShop senza Referer Interno
+Blocca chiamate dirette alla ricerca PrestaShop prive di referer del sito.
 ```text
-not ip.src.country in {"IT" "SM" "VA"}
+(http.request.uri.query contains "controller=search" or http.request.uri.query contains "s=" or http.request.uri.path contains "/cerca") and (http.referer eq "" or not http.referer contains "{DOMAIN}")
 ```
 
 ---
 
 ### Espressione Completa (Cloudflare Expression Builder)
 
+> [!NOTE]
+> Sostituisci `{DOMAIN}` con il dominio effettivo del sito (es. `mysite.com`).
+
 ```text
-(not ip.src.country in {"IT" "SM" "VA"})
+(http.request.uri.query contains "controller=search" or http.request.uri.query contains "s=" or http.request.uri.path contains "/cerca") and (http.referer eq "" or not http.referer contains "{DOMAIN}")
 ```

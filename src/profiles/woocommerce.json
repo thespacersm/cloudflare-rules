@@ -19,6 +19,7 @@
       "jetpack",
       "brevo"
     ],
+    "verifylist": "verifylist-countries",
     "blacklist": "blacklist-woocommerce"
   },
   "cache": {

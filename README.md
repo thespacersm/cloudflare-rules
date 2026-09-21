@@ -72,7 +72,23 @@ Esegui semplicemente lo script di build:
 ```bash
 python3 build.py
 ```
-Tutti i file `WHITELIST.md`, `BLACKLIST.md`, `FPC.md` verranno rigenerati all'istante con tabelle, intestazioni `####`, spiegazioni ed espressioni `or` complete.
+Tutti i file `WHITELIST.md`, `VERIFYLIST.md`, `BLACKLIST.md`, `FPC.md` verranno rigenerati all'istante con tabelle, intestazioni `####`, spiegazioni ed espressioni `or` complete.
+
+---
+
+## 🛡️ Architettura WAF a 3 Livelli (Custom Rules)
+
+Le regole WAF sono organizzate in 3 livelli valutati in sequenza:
+
+1. **Regola 1: `WHITELIST - {PLATFORM}`**
+   * **Azione**: `Skip` (salta Bot Fight Mode/SBFM, Managed Ruleset WAF, Rate Limiting, BIC e regole WAF successive)
+   * **Contenuto**: integrazioni autorizzate (Doofinder, Googlebot, Bingbot, Danea, Uptime Kuma, Windsor.ai, webhook PayPal/Stripe/BKN301, asset statici CSS/JS/immagini).
+2. **Regola 2: `VERIFYLIST - {PLATFORM}`**
+   * **Azione**: `Verifica interattiva (Managed Challenge / Turnstile)`
+   * **Contenuto**: traffico con geolocalizzazione esterna ad Italia (IT), San Marino (SM) e Città del Vaticano (VA).
+3. **Regola 3: `BLACKLIST - {PLATFORM}`**
+   * **Azione**: `Blocco (Block 403)`
+   * **Contenuto**: chiamate dirette a endpoint di ricerca interna e filtri layered navigation privi di referer interno valido (anti-flooding).
 
 ---
 

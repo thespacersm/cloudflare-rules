@@ -1,0 +1,15 @@
+{
+  "id": "verifylist-countries",
+  "name": "VERIFYLIST",
+  "action": "managed_challenge",
+  "action_label": "Verifica interattiva (Managed Challenge)",
+  "description": "Richiede una Verifica Interattiva (Cloudflare Turnstile) per tutti i visitatori con geolocalizzazione IP esterna ad Italia (IT), San Marino (SM) e Città del Vaticano (VA).",
+  "expression": "not ip.src.country in {\"IT\" \"SM\" \"VA\"}",
+  "conditions": [
+    {
+      "title": "Verifica Nazioni Estere",
+      "desc": "Sfida con verifica interattiva tutti i visitatori provenienti da paesi diversi da Italia, San Marino e Città del Vaticano.",
+      "expr": "not ip.src.country in {\"IT\" \"SM\" \"VA\"}"
+    }
+  ]
+}

@@ -1,15 +1,15 @@
 {
   "id": "blacklist-prestashop",
-  "name": "BLACKLIST - PRESTASHOP",
-  "action": "managed_challenge",
-  "action_label": "Verifica interattiva (Managed Challenge)",
-  "description": "Richiede una Verifica Interattiva (Cloudflare Turnstile) per tutti i visitatori con geolocalizzazione IP esterna ad Italia (IT), San Marino (SM) e Città del Vaticano (VA).",
-  "expression": "(not ip.src.country in {\"IT\" \"SM\" \"VA\"})",
+  "name": "BLACKLIST",
+  "action": "block",
+  "action_label": "Blocco (Block 403)",
+  "description": "Blocco immediato (403) per richieste alla ricerca e filtri PrestaShop (controller=search o ?s=) prive di referer interno valido.",
+  "expression": "(http.request.uri.query contains \"controller=search\" or http.request.uri.query contains \"s=\" or http.request.uri.path contains \"/cerca\") and (http.referer eq \"\" or not http.referer contains \"{DOMAIN}\")",
   "conditions": [
     {
-      "title": "Blocco Nazioni Estere",
-      "desc": "Sfida con verifica interattiva tutti i visitatori provenienti da paesi diversi da Italia, San Marino e Città del Vaticano.",
-      "expr": "not ip.src.country in {\"IT\" \"SM\" \"VA\"}"
+      "title": "Ricerca PrestaShop senza Referer Interno",
+      "desc": "Blocca chiamate dirette alla ricerca PrestaShop prive di referer del sito.",
+      "expr": "(http.request.uri.query contains \"controller=search\" or http.request.uri.query contains \"s=\" or http.request.uri.path contains \"/cerca\") and (http.referer eq \"\" or not http.referer contains \"{DOMAIN}\")"
     }
   ]
 }

@@ -1,19 +1,14 @@
 {
   "id": "blacklist-woocommerce",
-  "name": "BLACKLIST - WOOCOMMERCE",
-  "action": "managed_challenge",
-  "action_label": "Verifica interattiva (Managed Challenge)",
-  "description": "Richiede una Verifica Interattiva (Cloudflare Turnstile) per tutti i visitatori con geolocalizzazione IP esterna ad Italia (IT), San Marino (SM) e Città del Vaticano (VA), oppure per qualsiasi richiesta verso la ricerca interna (?s= o /search/) o con filtri prodotto (filter_*, min_price, max_price) priva di referer interno valido.",
-  "expression": "(not ip.src.country in {\"IT\" \"SM\" \"VA\"}) or ((http.request.uri.query contains \"s=\" or http.request.uri.path contains \"/search/\" or http.request.uri.query contains \"filter_\" or http.request.uri.query contains \"min_price\" or http.request.uri.query contains \"max_price\") and (http.referer eq \"\" or not http.referer contains \"{DOMAIN}\"))",
+  "name": "BLACKLIST",
+  "action": "block",
+  "action_label": "Blocco (Block 403)",
+  "description": "Blocco immediato (403) per qualsiasi richiesta verso la ricerca interna (?s= o /search/) o con filtri prodotto (filter_*, min_price, max_price) priva di referer interno valido.",
+  "expression": "(http.request.uri.query contains \"s=\" or http.request.uri.path contains \"/search/\" or http.request.uri.query contains \"filter_\" or http.request.uri.query contains \"min_price\" or http.request.uri.query contains \"max_price\") and (http.referer eq \"\" or not http.referer contains \"{DOMAIN}\")",
   "conditions": [
     {
-      "title": "Blocco Nazioni Estere",
-      "desc": "Sfida con verifica interattiva tutti i visitatori provenienti da paesi diversi da Italia, San Marino e Città del Vaticano.",
-      "expr": "not ip.src.country in {\"IT\" \"SM\" \"VA\"}"
-    },
-    {
-      "title": "Ricerca e Filtri senza Referer Interno",
-      "desc": "Blocca/sfida chiamate automatiche alla ricerca WordPress/WooCommerce (?s= o /search/) o a parametri di filtraggio prodotto senza referer valido.",
+      "title": "Ricerca e Filtri WooCommerce senza Referer Interno",
+      "desc": "Blocca richieste alla ricerca e ai filtri layered navigation di WooCommerce se prive di referer interno.",
       "expr": "(http.request.uri.query contains \"s=\" or http.request.uri.path contains \"/search/\" or http.request.uri.query contains \"filter_\" or http.request.uri.query contains \"min_price\" or http.request.uri.query contains \"max_price\") and (http.referer eq \"\" or not http.referer contains \"{DOMAIN}\")"
     }
   ]

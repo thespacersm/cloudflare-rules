@@ -64,6 +64,35 @@ def build_waf_whitelist(profile):
     return md
 
 
+def build_waf_verifylist(profile):
+    vl_id = profile["waf"].get("verifylist", "verifylist-countries")
+    vl_path = os.path.join(RULES_DIR, "waf", f"{vl_id}.json")
+    rule = load_json(vl_path)
+    title = profile["title"].upper()
+
+    md = f"# VERIFYLIST - {title}\n\n"
+    md += "### Azione Cloudflare (WAF Custom Rule)\n"
+    md += f"* **Azione**: `{rule.get('action_label', 'Verifica interattiva (Managed Challenge)')}` (`action: {rule.get('action', 'managed_challenge')}`)\n\n"
+    md += f"### Descrizione\n{rule['description']}\n\n"
+    md += "---\n\n"
+    md += "### Condizioni Dettagliate con Commenti\n\n"
+
+    for c in rule.get("conditions", []):
+        md += f"#### {c['title']}\n"
+        md += f"{c['desc']}\n"
+        md += "```text\n"
+        md += f"{c['expr']}\n"
+        md += "```\n\n"
+
+    md += "---\n\n"
+    md += "### Espressione Completa (Cloudflare Expression Builder)\n\n"
+    md += "```text\n"
+    md += f"{rule['expression']}\n"
+    md += "```\n"
+
+    return md
+
+
 def build_waf_blacklist(profile):
     bl_id = profile["waf"].get("blacklist", f"blacklist-{profile['platform']}")
     bl_path = os.path.join(RULES_DIR, "waf", f"{bl_id}.json")
@@ -72,7 +101,7 @@ def build_waf_blacklist(profile):
 
     md = f"# BLACKLIST - {title}\n\n"
     md += "### Azione Cloudflare (WAF Custom Rule)\n"
-    md += f"* **Azione**: `{rule.get('action_label', 'Verifica interattiva (Managed Challenge)')}` (`action: {rule.get('action', 'managed_challenge')}`)\n\n"
+    md += f"* **Azione**: `{rule.get('action_label', 'Blocco (Block 403)')}` (`action: {rule.get('action', 'block')}`)\n\n"
     md += f"### Descrizione\n{rule['description']}\n\n"
     md += "---\n\n"
     md += "### Condizioni Dettagliate con Commenti\n\n"
@@ -206,19 +235,25 @@ def main():
             f.write(waf_whitelist_md)
         print(f"  -> build/{platform}/waf/WHITELIST.md")
 
-        # 2. WAF Blacklist
+        # 2. WAF Verifylist
+        waf_verifylist_md = build_waf_verifylist(profile)
+        with open(os.path.join(dest_waf, "VERIFYLIST.md"), "w", encoding="utf-8") as f:
+            f.write(waf_verifylist_md)
+        print(f"  -> build/{platform}/waf/VERIFYLIST.md")
+
+        # 3. WAF Blacklist
         waf_blacklist_md = build_waf_blacklist(profile)
         with open(os.path.join(dest_waf, "BLACKLIST.md"), "w", encoding="utf-8") as f:
             f.write(waf_blacklist_md)
         print(f"  -> build/{platform}/waf/BLACKLIST.md")
 
-        # 3. Cache Whitelist (Bypass)
+        # 4. Cache Whitelist (Bypass)
         cache_whitelist_md = build_cache_whitelist(profile)
         with open(os.path.join(dest_cache, "WHITELIST.md"), "w", encoding="utf-8") as f:
             f.write(cache_whitelist_md)
         print(f"  -> build/{platform}/cache/WHITELIST.md")
 
-        # 4. Cache FPC
+        # 5. Cache FPC
         cache_fpc_md = build_cache_fpc(profile)
         with open(os.path.join(dest_cache, "FPC.md"), "w", encoding="utf-8") as f:
             f.write(cache_fpc_md)
