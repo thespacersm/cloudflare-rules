@@ -16,7 +16,7 @@
       "doofinder-path",
       "m2epro"
     ],
-    "country_block": "country-block"
+    "blacklist": "blacklist-magento2"
   },
   "cache": {
     "bypass": "magento2-bypass",

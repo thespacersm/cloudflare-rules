@@ -72,7 +72,7 @@ Esegui semplicemente lo script di build:
 ```bash
 python3 build.py
 ```
-Tutti i file `WHITELIST.md`, `COUNTRY_BLOCK.md`, `FPC.md` verranno rigenerati all'istante con tabelle, intestazioni `####`, spiegazioni ed espressioni `or` complete.
+Tutti i file `WHITELIST.md`, `BLACKLIST.md`, `FPC.md` verranno rigenerati all'istante con tabelle, intestazioni `####`, spiegazioni ed espressioni `or` complete.
 
 ---
 

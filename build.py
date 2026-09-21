@@ -64,20 +64,34 @@ def build_waf_whitelist(profile):
     return md
 
 
-def build_waf_country_block(profile):
-    cb_id = profile["waf"].get("country_block", "country-block")
-    cb_path = os.path.join(RULES_DIR, "waf", f"{cb_id}.json")
-    rule = load_json(cb_path)
+def build_waf_blacklist(profile):
+    bl_id = profile["waf"].get("blacklist", f"blacklist-{profile['platform']}")
+    bl_path = os.path.join(RULES_DIR, "waf", f"{bl_id}.json")
+    rule = load_json(bl_path)
+    title = profile["title"].upper()
 
-    md = f"# {rule['name']}\n\n"
-    md += "### Azione\n"
-    md += f"`{rule['action']}`\n\n"
-    md += "### Espressione Cloudflare\n"
+    md = f"# BLACKLIST - {title}\n\n"
+    md += "### Azione Cloudflare (WAF Custom Rule)\n"
+    md += f"* **Azione**: `{rule.get('action_label', 'Verifica interattiva (Interactive Challenge)')}` (`action: {rule.get('action', 'interactive_challenge')}`)\n\n"
+    md += f"### Descrizione\n{rule['description']}\n\n"
+    md += "---\n\n"
+    md += "### Condizioni Dettagliate con Commenti\n\n"
+
+    for c in rule.get("conditions", []):
+        md += f"#### {c['title']}\n"
+        md += f"{c['desc']}\n"
+        md += "```text\n"
+        md += f"{c['expr']}\n"
+        md += "```\n\n"
+
+    md += "---\n\n"
+    md += "### Espressione Completa (Cloudflare Expression Builder)\n\n"
+    if "{DOMAIN}" in rule["expression"]:
+        md += "> [!NOTE]\n"
+        md += "> Sostituisci `{DOMAIN}` con il dominio effettivo del sito (es. `mysite.com`).\n\n"
     md += "```text\n"
     md += f"{rule['expression']}\n"
-    md += "```\n\n"
-    md += "### Descrizione\n"
-    md += f"{rule['description']}\n"
+    md += "```\n"
 
     return md
 
@@ -192,11 +206,11 @@ def main():
             f.write(waf_whitelist_md)
         print(f"  -> build/{platform}/waf/WHITELIST.md")
 
-        # 2. WAF Country Block
-        waf_country_block_md = build_waf_country_block(profile)
-        with open(os.path.join(dest_waf, "COUNTRY_BLOCK.md"), "w", encoding="utf-8") as f:
-            f.write(waf_country_block_md)
-        print(f"  -> build/{platform}/waf/COUNTRY_BLOCK.md")
+        # 2. WAF Blacklist
+        waf_blacklist_md = build_waf_blacklist(profile)
+        with open(os.path.join(dest_waf, "BLACKLIST.md"), "w", encoding="utf-8") as f:
+            f.write(waf_blacklist_md)
+        print(f"  -> build/{platform}/waf/BLACKLIST.md")
 
         # 3. Cache Whitelist (Bypass)
         cache_whitelist_md = build_cache_whitelist(profile)

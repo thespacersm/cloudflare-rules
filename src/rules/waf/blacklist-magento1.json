@@ -1,0 +1,20 @@
+{
+  "id": "blacklist-magento1",
+  "name": "BLACKLIST",
+  "action": "interactive_challenge",
+  "action_label": "Verifica interattiva (Interactive Challenge)",
+  "description": "Richiede una Verifica Interattiva (Cloudflare Turnstile) per tutti i visitatori con geolocalizzazione IP esterna ad Italia (IT), San Marino (SM) e Città del Vaticano (VA), oppure per qualsiasi richiesta verso la ricerca interna (catalogsearch) o con filtri layered navigation (%2c o ,) priva di referer interno valido.",
+  "expression": "(not ip.src.country in {\"IT\" \"SM\" \"VA\"}) or ((http.request.uri.path contains \"catalogsearch\" or lower(http.request.uri.query) contains \"%2c\" or http.request.uri.query contains \",\") and (http.referer eq \"\" or not http.referer contains \"{DOMAIN}\"))",
+  "conditions": [
+    {
+      "title": "Blocco Nazioni Estere",
+      "desc": "Sfida con verifica interattiva tutti i visitatori provenienti da paesi diversi da Italia, San Marino e Città del Vaticano.",
+      "expr": "not ip.src.country in {\"IT\" \"SM\" \"VA\"}"
+    },
+    {
+      "title": "Ricerca e Filtri senza Referer Interno",
+      "desc": "Intercetta bot e scanner che eseguono query di ricerca gravose su Magento 1 (catalogsearch) o combinazioni di filtri layered navigation senza passare dalla navigazione del sito.",
+      "expr": "(http.request.uri.path contains \"catalogsearch\" or lower(http.request.uri.query) contains \"%2c\" or http.request.uri.query contains \",\") and (http.referer eq \"\" or not http.referer contains \"{DOMAIN}\")"
+    }
+  ]
+}

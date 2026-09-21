@@ -62,7 +62,7 @@ def resolve_zone_id(zone_input, token):
     return zone_info["id"], zone_info["name"]
 
 
-def build_waf_payload(profile):
+def build_waf_payload(profile, zone_name=""):
     title = profile["title"].upper()
     rule_ids = profile["waf"]["whitelist"]
     rules = []
@@ -72,9 +72,13 @@ def build_waf_payload(profile):
 
     whitelist_expr = " or ".join([f"({r['expression']})" for r in rules])
 
-    cb_id = profile["waf"].get("country_block", "country-block")
-    cb_path = os.path.join(RULES_DIR, "waf", f"{cb_id}.json")
-    cb_rule = load_json(cb_path)
+    bl_id = profile["waf"].get("blacklist", f"blacklist-{profile['platform']}")
+    bl_path = os.path.join(RULES_DIR, "waf", f"{bl_id}.json")
+    bl_rule = load_json(bl_path)
+
+    bl_expr = bl_rule["expression"]
+    if zone_name:
+        bl_expr = bl_expr.replace("{DOMAIN}", zone_name)
 
     return {
         "rules": [
@@ -105,10 +109,10 @@ def build_waf_payload(profile):
                 }
             },
             {
-                "action": "managed_challenge",
-                "description": cb_rule["name"],
+                "action": bl_rule.get("action", "interactive_challenge"),
+                "description": bl_rule.get("name", "BLACKLIST"),
                 "enabled": True,
-                "expression": cb_rule["expression"]
+                "expression": bl_expr
             }
         ]
     }
@@ -184,7 +188,7 @@ def main():
     # 1. WAF Deployment
     if deploy_waf:
         print("\n--- [WAF RULES] ---")
-        waf_payload = build_waf_payload(profile)
+        waf_payload = build_waf_payload(profile, zone_name)
         if args.dry_run:
             print("[DRY-RUN] WAF Payload:")
             print(json.dumps(waf_payload, indent=2))

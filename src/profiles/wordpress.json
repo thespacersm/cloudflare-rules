@@ -17,7 +17,7 @@
       "m2epro",
       "jetpack"
     ],
-    "country_block": "country-block"
+    "blacklist": "blacklist-wordpress"
   },
   "cache": {
     "bypass": "wordpress-bypass",
