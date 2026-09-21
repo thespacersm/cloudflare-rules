@@ -1,0 +1,8 @@
+{
+  "id": "windsor-ai",
+  "name": "Sync / API - Connettore Windsor.ai",
+  "category": "Sync / API",
+  "description": "Chiamate API REST del connettore Windsor.ai per sincronizzazione dati e reportistica BI.",
+  "expression": "http.request.uri.path contains \"/rest/\" and http.user_agent eq \"Windsor/1.0\"",
+  "note": "Connettore REST Windsor.ai"
+}

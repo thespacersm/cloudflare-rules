@@ -82,6 +82,12 @@ Chiamate API del connettore M2E Pro per la sincronizzazione dei marketplace Amaz
 http.request.uri.path contains "M2ePro"
 ```
 
+#### Sync / API - Connettore Windsor.ai
+Chiamate API REST del connettore Windsor.ai per sincronizzazione dati e reportistica BI.
+```text
+http.request.uri.path contains "/rest/" and http.user_agent eq "Windsor/1.0"
+```
+
 ---
 
 ### Tabella di Riepilogo
@@ -100,11 +106,12 @@ http.request.uri.path contains "M2ePro"
 | **Path / Feed** | `http.request.uri.path contains "trovaprezzi"` | Crawler / bot TrovaPrezzi |
 | **Path / Feed** | `http.request.uri.path contains "doofinder"` | Ricerca Doofinder |
 | **Path / Sync** | `http.request.uri.path contains "M2ePro"` | Connector eBay / Amazon M2E Pro |
+| **Sync / API** | `http.request.uri.path contains "/rest/" and http.user_agent eq "Windsor/1.0"` | Connettore REST Windsor.ai |
 
 ---
 
 ### Espressione Completa (Cloudflare Expression Builder)
 
 ```text
-(ip.src in {54.171.4.216 52.2.218.41 18.143.220.25}) or (http.user_agent contains "Java" and ip.src.country eq "IT") or (ip.src.asnum in {15169 396982}) or (cf.client.bot and http.user_agent contains "Google") or (cf.client.bot and http.user_agent contains "bingbot") or (http.user_agent contains "DaneaEasyfatt") or (ip.src eq 49.12.69.209 and http.user_agent contains "Kuma") or (ends_with(http.request.uri.path, ".jpg") or ends_with(http.request.uri.path, ".jpeg") or ends_with(http.request.uri.path, ".png") or ends_with(http.request.uri.path, ".webp") or ends_with(http.request.uri.path, ".gif") or ends_with(http.request.uri.path, ".svg") or ends_with(http.request.uri.path, ".ico") or ends_with(http.request.uri.path, ".avif")) or (http.request.uri.path contains "feed") or (http.request.uri.path contains "trovaprezzi") or (http.request.uri.path contains "doofinder") or (http.request.uri.path contains "M2ePro")
+(ip.src in {54.171.4.216 52.2.218.41 18.143.220.25}) or (http.user_agent contains "Java" and ip.src.country eq "IT") or (ip.src.asnum in {15169 396982}) or (cf.client.bot and http.user_agent contains "Google") or (cf.client.bot and http.user_agent contains "bingbot") or (http.user_agent contains "DaneaEasyfatt") or (ip.src eq 49.12.69.209 and http.user_agent contains "Kuma") or (ends_with(http.request.uri.path, ".jpg") or ends_with(http.request.uri.path, ".jpeg") or ends_with(http.request.uri.path, ".png") or ends_with(http.request.uri.path, ".webp") or ends_with(http.request.uri.path, ".gif") or ends_with(http.request.uri.path, ".svg") or ends_with(http.request.uri.path, ".ico") or ends_with(http.request.uri.path, ".avif")) or (http.request.uri.path contains "feed") or (http.request.uri.path contains "trovaprezzi") or (http.request.uri.path contains "doofinder") or (http.request.uri.path contains "M2ePro") or (http.request.uri.path contains "/rest/" and http.user_agent eq "Windsor/1.0")
 ```

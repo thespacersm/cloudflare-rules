@@ -14,7 +14,8 @@
       "feeds",
       "trovaprezzi",
       "doofinder-path",
-      "m2epro"
+      "m2epro",
+      "windsor-ai"
     ],
     "blacklist": "blacklist-magento1"
   },
