@@ -3,6 +3,6 @@
   "name": "Gestionale - Connettore Passepartout Mexal / Sprix",
   "category": "Gestionale",
   "description": "Chiamate API del connettore gestionale Passepartout Mexal (Sprix) per la sincronizzazione di ordini, anagrafiche e catalogo prodotti.",
-  "expression": "http.user_agent contains \"SPRIX\"",
-  "note": "Sincronizzazione Passepartout Mexal / Sprix"
+  "expression": "http.user_agent contains \"SPRIX\" or ip.src eq 89.186.51.31",
+  "note": "Sincronizzazione Passepartout Mexal / Sprix (User-Agent o IP Passepartout)"
 }
