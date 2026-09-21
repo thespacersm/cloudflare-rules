@@ -23,15 +23,15 @@ http.user_agent contains "Java" and ip.src.country eq "IT"
 ```
 
 #### ASN GOOGLE
-Autonomous System Numbers (ASN) di Google e Google Cloud per garantire l'accesso a servizi, crawler e API di Google.
+Autonomous System Numbers (ASN) di Google e Google Cloud per garantire l'accesso a servizi, crawler e API di Google (con esclusione di GoogleOther).
 ```text
-ip.src.asnum in {15169 396982}
+ip.src.asnum in {15169 396982} and not http.user_agent contains "GoogleOther"
 ```
 
 #### Bot Ufficiali - Crawler Google verificato
-Crawler ufficiale Googlebot con verifica di autenticità gestita da Cloudflare Bot Management per l'indicizzazione SEO.
+Crawler ufficiale Googlebot con verifica di autenticità gestita da Cloudflare Bot Management per l'indicizzazione SEO (con esclusione di GoogleOther per evitare scraping secondario e addestramento AI).
 ```text
-cf.client.bot and http.user_agent contains "Google"
+cf.client.bot and http.user_agent contains "Google" and not http.user_agent contains "GoogleOther"
 ```
 
 #### Bot Ufficiali - Crawler Bing verificato
@@ -120,8 +120,8 @@ http.request.method eq "POST" and ip.src.country in {"SM" "IT"} and http.request
 | :--- | :--- | :--- |
 | **Doofinder** | `ip.src in {54.171.4.216 52.2.218.41 18.143.220.25}` | Crawler Doofinder (EU, USA, ASIA) per indicizzazione catalogo |
 | **Pagamenti** | `http.user_agent contains "Java" and ip.src.country eq "IT"` | Callback gateway bancari Java da IP italiano (es. Consorzio Triveneto, Nexi) |
-| **ASN** | `ip.src.asnum in {15169 396982}` | ASN Google / Google Cloud |
-| **Bot Ufficiali** | `cf.client.bot and http.user_agent contains "Google"` | Crawler Google verificato |
+| **ASN** | `ip.src.asnum in {15169 396982} and not http.user_agent contains "GoogleOther"` | ASN Google / Google Cloud (escluso GoogleOther) |
+| **Bot Ufficiali** | `cf.client.bot and http.user_agent contains "Google" and not http.user_agent contains "GoogleOther"` | Crawler Google verificato (escluso GoogleOther) |
 | **Bot Ufficiali** | `cf.client.bot and http.user_agent contains "bingbot" and not http.request.uri.path contains "catalogsearch"` | Crawler Bing verificato (escluso catalogsearch) |
 | **Gestionale** | `http.user_agent contains "DaneaEasyfatt"` | Sincronizzazione Danea Easyfatt |
 | **Gestionale** | `http.user_agent contains "SPRIX" or ip.src eq 89.186.51.31` | Sincronizzazione Passepartout Mexal / Sprix (User-Agent o IP Passepartout) |
@@ -141,5 +141,5 @@ http.request.method eq "POST" and ip.src.country in {"SM" "IT"} and http.request
 ### Espressione Completa (Cloudflare Expression Builder)
 
 ```text
-(ip.src in {54.171.4.216 52.2.218.41 18.143.220.25}) or (http.user_agent contains "Java" and ip.src.country eq "IT") or (ip.src.asnum in {15169 396982}) or (cf.client.bot and http.user_agent contains "Google") or (cf.client.bot and http.user_agent contains "bingbot" and not http.request.uri.path contains "catalogsearch") or (http.user_agent contains "DaneaEasyfatt") or (http.user_agent contains "SPRIX" or ip.src eq 89.186.51.31) or (ip.src eq 49.12.69.209 and http.user_agent contains "Kuma") or (ends_with(http.request.uri.path, ".jpg") or ends_with(http.request.uri.path, ".jpeg") or ends_with(http.request.uri.path, ".png") or ends_with(http.request.uri.path, ".webp") or ends_with(http.request.uri.path, ".gif") or ends_with(http.request.uri.path, ".svg") or ends_with(http.request.uri.path, ".ico") or ends_with(http.request.uri.path, ".avif") or ends_with(http.request.uri.path, ".bmp") or ends_with(http.request.uri.path, ".tif") or ends_with(http.request.uri.path, ".tiff") or ends_with(http.request.uri.path, ".css") or ends_with(http.request.uri.path, ".js")) or (http.request.uri.path contains "feed") or (http.request.uri.path contains "trovaprezzi") or (http.request.uri.path contains "doofinder") or (http.request.uri.path contains "M2ePro") or (http.request.uri.path contains "/rest/" and http.user_agent eq "Windsor/1.0") or (http.request.method eq "POST" and http.user_agent contains "PayPal" and (http.request.uri.path contains "paypal" or http.request.uri.query contains "paypal")) or (http.request.method eq "POST" and starts_with(http.user_agent, "Stripe/") and (http.request.uri.path contains "stripe" or http.request.uri.query contains "stripe")) or (http.request.method eq "POST" and ip.src.country in {"SM" "IT"} and http.request.uri.path contains "bkn")
+(ip.src in {54.171.4.216 52.2.218.41 18.143.220.25}) or (http.user_agent contains "Java" and ip.src.country eq "IT") or (ip.src.asnum in {15169 396982} and not http.user_agent contains "GoogleOther") or (cf.client.bot and http.user_agent contains "Google" and not http.user_agent contains "GoogleOther") or (cf.client.bot and http.user_agent contains "bingbot" and not http.request.uri.path contains "catalogsearch") or (http.user_agent contains "DaneaEasyfatt") or (http.user_agent contains "SPRIX" or ip.src eq 89.186.51.31) or (ip.src eq 49.12.69.209 and http.user_agent contains "Kuma") or (ends_with(http.request.uri.path, ".jpg") or ends_with(http.request.uri.path, ".jpeg") or ends_with(http.request.uri.path, ".png") or ends_with(http.request.uri.path, ".webp") or ends_with(http.request.uri.path, ".gif") or ends_with(http.request.uri.path, ".svg") or ends_with(http.request.uri.path, ".ico") or ends_with(http.request.uri.path, ".avif") or ends_with(http.request.uri.path, ".bmp") or ends_with(http.request.uri.path, ".tif") or ends_with(http.request.uri.path, ".tiff") or ends_with(http.request.uri.path, ".css") or ends_with(http.request.uri.path, ".js")) or (http.request.uri.path contains "feed") or (http.request.uri.path contains "trovaprezzi") or (http.request.uri.path contains "doofinder") or (http.request.uri.path contains "M2ePro") or (http.request.uri.path contains "/rest/" and http.user_agent eq "Windsor/1.0") or (http.request.method eq "POST" and http.user_agent contains "PayPal" and (http.request.uri.path contains "paypal" or http.request.uri.query contains "paypal")) or (http.request.method eq "POST" and starts_with(http.user_agent, "Stripe/") and (http.request.uri.path contains "stripe" or http.request.uri.query contains "stripe")) or (http.request.method eq "POST" and ip.src.country in {"SM" "IT"} and http.request.uri.path contains "bkn")
 ```
