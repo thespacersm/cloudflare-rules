@@ -17,7 +17,10 @@
       "m2epro",
       "woocommerce-core",
       "jetpack",
-      "brevo"
+      "brevo",
+      "paypal-webhook",
+      "stripe-webhook",
+      "bkn-webhook"
     ],
     "verifylist": "verifylist-countries",
     "blacklist": "blacklist-woocommerce"
