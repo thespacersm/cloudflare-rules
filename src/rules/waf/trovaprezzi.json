@@ -3,6 +3,6 @@
   "name": "Path / Feed - Crawler / bot TrovaPrezzi",
   "category": "Path / Feed",
   "description": "Richieste provenienti dai crawler e spider di TrovaPrezzi per la sincronizzazione dei prezzi e delle offerte.",
-  "expression": "http.request.uri.path contains \"trovaprezzi\"",
-  "note": "Crawler / bot TrovaPrezzi"
+  "expression": "http.request.uri.path contains \"trovaprezzi\" or http.user_agent contains \"PriceCrawlerBot\"",
+  "note": "Crawler / bot TrovaPrezzi (path o User-Agent PriceCrawlerBot)"
 }

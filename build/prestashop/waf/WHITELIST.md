@@ -67,7 +67,7 @@ http.request.uri.path contains "feed"
 #### Path / Feed - Crawler / bot TrovaPrezzi
 Richieste provenienti dai crawler e spider di TrovaPrezzi per la sincronizzazione dei prezzi e delle offerte.
 ```text
-http.request.uri.path contains "trovaprezzi"
+http.request.uri.path contains "trovaprezzi" or http.user_agent contains "PriceCrawlerBot"
 ```
 
 #### Path / Feed - Ricerca Doofinder
@@ -97,7 +97,7 @@ http.request.uri.path contains "M2ePro"
 | **Monitoraggio** | `ip.src eq 49.12.69.209 and http.user_agent contains "Kuma"` | Uptime Kuma probe |
 | **File Statici** | `ends_with(http.request.uri.path, ".jpg") or ends_with(http.request.uri.path, ".jpeg") or ends_with(http.request.uri.path, ".png") or ends_with(http.request.uri.path, ".webp") or ends_with(http.request.uri.path, ".gif") or ends_with(http.request.uri.path, ".svg") or ends_with(http.request.uri.path, ".ico") or ends_with(http.request.uri.path, ".avif") or ends_with(http.request.uri.path, ".bmp") or ends_with(http.request.uri.path, ".tif") or ends_with(http.request.uri.path, ".tiff") or ends_with(http.request.uri.path, ".css") or ends_with(http.request.uri.path, ".js")` | Bypass per CSS, JS, immagini e asset statici |
 | **Path / Feed** | `http.request.uri.path contains "feed"` | Feed prodotti |
-| **Path / Feed** | `http.request.uri.path contains "trovaprezzi"` | Crawler / bot TrovaPrezzi |
+| **Path / Feed** | `http.request.uri.path contains "trovaprezzi" or http.user_agent contains "PriceCrawlerBot"` | Crawler / bot TrovaPrezzi (path o User-Agent PriceCrawlerBot) |
 | **Path / Feed** | `http.request.uri.path contains "doofinder"` | Ricerca Doofinder |
 | **Path / Sync** | `http.request.uri.path contains "M2ePro"` | Connector eBay / Amazon M2E Pro |
 
@@ -106,5 +106,5 @@ http.request.uri.path contains "M2ePro"
 ### Espressione Completa (Cloudflare Expression Builder)
 
 ```text
-(ip.src in {54.171.4.216 52.2.218.41 18.143.220.25}) or (http.user_agent contains "Java" and ip.src.country eq "IT") or (ip.src.asnum in {15169 396982} and not http.user_agent contains "GoogleOther") or (cf.client.bot and http.user_agent contains "Google" and not http.user_agent contains "GoogleOther") or (cf.client.bot and http.user_agent contains "bingbot" and not http.request.uri.path contains "catalogsearch") or (http.user_agent contains "DaneaEasyfatt") or (ip.src eq 49.12.69.209 and http.user_agent contains "Kuma") or (ends_with(http.request.uri.path, ".jpg") or ends_with(http.request.uri.path, ".jpeg") or ends_with(http.request.uri.path, ".png") or ends_with(http.request.uri.path, ".webp") or ends_with(http.request.uri.path, ".gif") or ends_with(http.request.uri.path, ".svg") or ends_with(http.request.uri.path, ".ico") or ends_with(http.request.uri.path, ".avif") or ends_with(http.request.uri.path, ".bmp") or ends_with(http.request.uri.path, ".tif") or ends_with(http.request.uri.path, ".tiff") or ends_with(http.request.uri.path, ".css") or ends_with(http.request.uri.path, ".js")) or (http.request.uri.path contains "feed") or (http.request.uri.path contains "trovaprezzi") or (http.request.uri.path contains "doofinder") or (http.request.uri.path contains "M2ePro")
+(ip.src in {54.171.4.216 52.2.218.41 18.143.220.25}) or (http.user_agent contains "Java" and ip.src.country eq "IT") or (ip.src.asnum in {15169 396982} and not http.user_agent contains "GoogleOther") or (cf.client.bot and http.user_agent contains "Google" and not http.user_agent contains "GoogleOther") or (cf.client.bot and http.user_agent contains "bingbot" and not http.request.uri.path contains "catalogsearch") or (http.user_agent contains "DaneaEasyfatt") or (ip.src eq 49.12.69.209 and http.user_agent contains "Kuma") or (ends_with(http.request.uri.path, ".jpg") or ends_with(http.request.uri.path, ".jpeg") or ends_with(http.request.uri.path, ".png") or ends_with(http.request.uri.path, ".webp") or ends_with(http.request.uri.path, ".gif") or ends_with(http.request.uri.path, ".svg") or ends_with(http.request.uri.path, ".ico") or ends_with(http.request.uri.path, ".avif") or ends_with(http.request.uri.path, ".bmp") or ends_with(http.request.uri.path, ".tif") or ends_with(http.request.uri.path, ".tiff") or ends_with(http.request.uri.path, ".css") or ends_with(http.request.uri.path, ".js")) or (http.request.uri.path contains "feed") or (http.request.uri.path contains "trovaprezzi" or http.user_agent contains "PriceCrawlerBot") or (http.request.uri.path contains "doofinder") or (http.request.uri.path contains "M2ePro")
 ```
