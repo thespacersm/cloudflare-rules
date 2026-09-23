@@ -17,9 +17,11 @@
       "doofinder-path",
       "m2epro",
       "windsor-ai",
+      "motive",
       "paypal-webhook",
       "stripe-webhook",
-      "bkn-webhook"
+      "bkn-webhook",
+      "satispay"
     ],
     "verifylist": "verifylist-countries",
     "blacklist": "blacklist-magento2"

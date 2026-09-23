@@ -94,6 +94,12 @@ Chiamate API REST del connettore Windsor.ai per sincronizzazione dati e reportis
 http.request.uri.path contains "/rest/" and http.user_agent eq "Windsor/1.0"
 ```
 
+#### Sync / API - Motive Commerce Search
+Chiamate API REST di sincronizzazione catalogo da Motive Commerce Search (IndexRetriever).
+```text
+http.request.uri.path contains "/rest/" and starts_with(http.user_agent, "Motive/1.0 IndexRetriever")
+```
+
 #### PayPal - IPN & Webhook di Pagamento
 Chiamate POST di notifica IPN e Webhook REST inviate dai server PayPal con User-Agent proprietario.
 ```text
@@ -110,6 +116,12 @@ http.request.method eq "POST" and starts_with(http.user_agent, "Stripe/") and (h
 Notifiche server-to-server di conferma transazione dai gateway BKN301 (Banca di San Marino) inviate via POST da IP italiani o sammarinesi.
 ```text
 http.request.method eq "POST" and ip.src.country in {"SM" "IT"} and http.request.uri.path contains "bkn"
+```
+
+#### Satispay - Callback & Webhook di Pagamento
+Notifiche webhook, callback e chiamate API inviate dai server di Satispay.
+```text
+http.user_agent contains "Satispay" and (http.request.uri.path contains "satispay" or http.request.uri.query contains "satispay")
 ```
 
 ---
@@ -132,14 +144,16 @@ http.request.method eq "POST" and ip.src.country in {"SM" "IT"} and http.request
 | **Path / Feed** | `http.request.uri.path contains "doofinder"` | Ricerca Doofinder |
 | **Path / Sync** | `http.request.uri.path contains "M2ePro"` | Connector eBay / Amazon M2E Pro |
 | **Sync / API** | `http.request.uri.path contains "/rest/" and http.user_agent eq "Windsor/1.0"` | Connettore REST Windsor.ai |
+| **Sync / API** | `http.request.uri.path contains "/rest/" and starts_with(http.user_agent, "Motive/1.0 IndexRetriever")` | Connettore REST Motive Commerce Search |
 | **Pagamenti** | `http.request.method eq "POST" and http.user_agent contains "PayPal" and (http.request.uri.path contains "paypal" or http.request.uri.query contains "paypal")` | Notifiche IPN e webhook PayPal (POST con User-Agent PayPal) |
 | **Pagamenti** | `http.request.method eq "POST" and starts_with(http.user_agent, "Stripe/") and (http.request.uri.path contains "stripe" or http.request.uri.query contains "stripe")` | Webhook ufficiali Stripe (POST con User-Agent Stripe/) |
 | **Pagamenti** | `http.request.method eq "POST" and ip.src.country in {"SM" "IT"} and http.request.uri.path contains "bkn"` | Notifiche server BKN301 (POST da IT/SM) |
+| **Pagamenti** | `http.user_agent contains "Satispay" and (http.request.uri.path contains "satispay" or http.request.uri.query contains "satispay")` | Callback e webhook Satispay (User-Agent Satispay e URL satispay) |
 
 ---
 
 ### Espressione Completa (Cloudflare Expression Builder)
 
 ```text
-(ip.src in {54.171.4.216 52.2.218.41 18.143.220.25}) or (http.user_agent contains "Java" and ip.src.country eq "IT") or (ip.src.asnum in {15169 396982} and not http.user_agent contains "GoogleOther") or (cf.client.bot and http.user_agent contains "Google" and not http.user_agent contains "GoogleOther") or (cf.client.bot and http.user_agent contains "bingbot" and not http.request.uri.path contains "catalogsearch") or (http.user_agent contains "DaneaEasyfatt") or (http.user_agent contains "SPRIX" or ip.src eq 89.186.51.31) or (ip.src eq 49.12.69.209 and http.user_agent contains "Kuma") or (ends_with(http.request.uri.path, ".jpg") or ends_with(http.request.uri.path, ".jpeg") or ends_with(http.request.uri.path, ".png") or ends_with(http.request.uri.path, ".webp") or ends_with(http.request.uri.path, ".gif") or ends_with(http.request.uri.path, ".svg") or ends_with(http.request.uri.path, ".ico") or ends_with(http.request.uri.path, ".avif") or ends_with(http.request.uri.path, ".bmp") or ends_with(http.request.uri.path, ".tif") or ends_with(http.request.uri.path, ".tiff") or ends_with(http.request.uri.path, ".css") or ends_with(http.request.uri.path, ".js")) or (http.request.uri.path contains "feed") or (http.request.uri.path contains "trovaprezzi" or http.user_agent contains "PriceCrawlerBot") or (http.request.uri.path contains "doofinder") or (http.request.uri.path contains "M2ePro") or (http.request.uri.path contains "/rest/" and http.user_agent eq "Windsor/1.0") or (http.request.method eq "POST" and http.user_agent contains "PayPal" and (http.request.uri.path contains "paypal" or http.request.uri.query contains "paypal")) or (http.request.method eq "POST" and starts_with(http.user_agent, "Stripe/") and (http.request.uri.path contains "stripe" or http.request.uri.query contains "stripe")) or (http.request.method eq "POST" and ip.src.country in {"SM" "IT"} and http.request.uri.path contains "bkn")
+(ip.src in {54.171.4.216 52.2.218.41 18.143.220.25}) or (http.user_agent contains "Java" and ip.src.country eq "IT") or (ip.src.asnum in {15169 396982} and not http.user_agent contains "GoogleOther") or (cf.client.bot and http.user_agent contains "Google" and not http.user_agent contains "GoogleOther") or (cf.client.bot and http.user_agent contains "bingbot" and not http.request.uri.path contains "catalogsearch") or (http.user_agent contains "DaneaEasyfatt") or (http.user_agent contains "SPRIX" or ip.src eq 89.186.51.31) or (ip.src eq 49.12.69.209 and http.user_agent contains "Kuma") or (ends_with(http.request.uri.path, ".jpg") or ends_with(http.request.uri.path, ".jpeg") or ends_with(http.request.uri.path, ".png") or ends_with(http.request.uri.path, ".webp") or ends_with(http.request.uri.path, ".gif") or ends_with(http.request.uri.path, ".svg") or ends_with(http.request.uri.path, ".ico") or ends_with(http.request.uri.path, ".avif") or ends_with(http.request.uri.path, ".bmp") or ends_with(http.request.uri.path, ".tif") or ends_with(http.request.uri.path, ".tiff") or ends_with(http.request.uri.path, ".css") or ends_with(http.request.uri.path, ".js")) or (http.request.uri.path contains "feed") or (http.request.uri.path contains "trovaprezzi" or http.user_agent contains "PriceCrawlerBot") or (http.request.uri.path contains "doofinder") or (http.request.uri.path contains "M2ePro") or (http.request.uri.path contains "/rest/" and http.user_agent eq "Windsor/1.0") or (http.request.uri.path contains "/rest/" and starts_with(http.user_agent, "Motive/1.0 IndexRetriever")) or (http.request.method eq "POST" and http.user_agent contains "PayPal" and (http.request.uri.path contains "paypal" or http.request.uri.query contains "paypal")) or (http.request.method eq "POST" and starts_with(http.user_agent, "Stripe/") and (http.request.uri.path contains "stripe" or http.request.uri.query contains "stripe")) or (http.request.method eq "POST" and ip.src.country in {"SM" "IT"} and http.request.uri.path contains "bkn") or (http.user_agent contains "Satispay" and (http.request.uri.path contains "satispay" or http.request.uri.query contains "satispay"))
 ```

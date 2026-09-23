@@ -1,0 +1,8 @@
+{
+  "id": "satispay",
+  "name": "Satispay - Callback & Webhook di Pagamento",
+  "category": "Pagamenti",
+  "description": "Notifiche webhook, callback e chiamate API inviate dai server di Satispay.",
+  "expression": "http.user_agent contains \"Satispay\" and (http.request.uri.path contains \"satispay\" or http.request.uri.query contains \"satispay\")",
+  "note": "Callback e webhook Satispay (User-Agent Satispay e URL satispay)"
+}

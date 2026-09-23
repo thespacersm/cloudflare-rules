@@ -1,0 +1,8 @@
+{
+  "id": "motive",
+  "name": "Sync / API - Motive Commerce Search",
+  "category": "Sync / API",
+  "description": "Chiamate API REST di sincronizzazione catalogo da Motive Commerce Search (IndexRetriever).",
+  "expression": "http.request.uri.path contains \"/rest/\" and starts_with(http.user_agent, \"Motive/1.0 IndexRetriever\")",
+  "note": "Connettore REST Motive Commerce Search"
+}
