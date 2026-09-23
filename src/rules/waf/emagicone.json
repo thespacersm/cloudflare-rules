@@ -1,0 +1,8 @@
+{
+  "id": "emagicone",
+  "name": "Sync / Bridge - eMagicOne Store Manager",
+  "category": "Sync / Bridge",
+  "description": "Chiamate di sincronizzazione catalogo e ordini dell'applicativo desktop eMagicOne Store Manager tramite script bridge.",
+  "expression": "http.request.uri.path contains \"bridge_\" and http.user_agent contains \"Chrome/107.0.0.0\"",
+  "note": "Connettore Bridge eMagicOne Store Manager"
+}
