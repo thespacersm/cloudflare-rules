@@ -1,0 +1,47 @@
+{
+  "afarma.it": {
+    "profile": "magento2",
+    "tier": "standard",
+    "description": "Afarma Farmacia Online"
+  },
+  "emporiocattani.com": {
+    "profile": "magento2",
+    "tier": "standard",
+    "description": "Emporio Cattani Pelletteria"
+  },
+  "martiniepari.com": {
+    "profile": "magento2",
+    "tier": "standard",
+    "description": "Martini e Pari Forniture Alberghiere"
+  },
+  "gfprofumism.com": {
+    "profile": "woocommerce",
+    "tier": "standard",
+    "description": "GF Profumi San Marino"
+  },
+  "mynumi.net": {
+    "profile": "magento1",
+    "tier": "standard",
+    "description": "MyNumi Monete e Collezionismo"
+  },
+  "safarasoftair.com": {
+    "profile": "magento1",
+    "tier": "standard",
+    "description": "Safarà Softair"
+  },
+  "riminilambrettacentre.com": {
+    "profile": "magento1",
+    "tier": "standard",
+    "description": "Rimini Lambretta Centre"
+  },
+  "ingrossoblt.com": {
+    "profile": "magento1",
+    "tier": "standard",
+    "description": "Ingrosso BLT"
+  },
+  "softairrastelli.com": {
+    "profile": "magento1",
+    "tier": "standard",
+    "description": "Softair Rastelli"
+  }
+}
