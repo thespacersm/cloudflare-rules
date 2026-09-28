@@ -1,0 +1,8 @@
+{
+  "id": "thespace-manage",
+  "name": "Gestionale - TheSpace Manage",
+  "category": "Gestionale",
+  "description": "Chiamate della piattaforma interna di gestione TheSpace Manage per operazioni amministrative sui siti clienti.",
+  "expression": "ip.src eq 138.199.169.63 and starts_with(http.user_agent, \"ThespaceManage/\")",
+  "note": "Connettore TheSpace Manage (IP + User-Agent dedicati)"
+}

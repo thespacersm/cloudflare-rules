@@ -19,7 +19,8 @@
       "windsor-ai",
       "paypal-webhook",
       "stripe-webhook",
-      "bkn-webhook"
+      "bkn-webhook",
+      "thespace-manage"
     ],
     "verifylist": "verifylist-countries",
     "blacklist": "blacklist-magento1"

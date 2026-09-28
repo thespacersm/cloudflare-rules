@@ -15,7 +15,8 @@
       "trovaprezzi",
       "doofinder-path",
       "m2epro",
-      "jetpack"
+      "jetpack",
+      "thespace-manage"
     ],
     "verifylist": "verifylist-countries",
     "blacklist": "blacklist-wordpress"

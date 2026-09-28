@@ -14,6 +14,11 @@
     "tier": "standard",
     "description": "Martini e Pari Forniture Alberghiere"
   },
+  "occhiali-profumi.com": {
+    "profile": "magento2",
+    "tier": "standard",
+    "description": "Occhiali Profumi"
+  },
   "gfprofumism.com": {
     "profile": "woocommerce",
     "tier": "standard",

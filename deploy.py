@@ -72,9 +72,12 @@ def resolve_zone_id(zone_input, token):
     return zone_info["id"], zone_info["name"]
 
 
-def build_waf_payload(profile, zone_name="", tier="standard"):
+def build_waf_payload(profile, zone_name="", tier="standard", extra_whitelist=None):
     title = profile["title"].upper()
-    rule_ids = profile["waf"]["whitelist"]
+    rule_ids = list(profile["waf"]["whitelist"])
+    for r_id in extra_whitelist or []:
+        if r_id not in rule_ids:
+            rule_ids.append(r_id)
     rules = []
     for r_id in rule_ids:
         r_path = os.path.join(RULES_DIR, "waf", f"{r_id}.json")
@@ -178,7 +181,7 @@ def build_cache_payload(profile):
     }
 
 
-def deploy_single_zone(zone_input, profile_name, tier, token, waf_only=False, cache_only=False, dry_run=False):
+def deploy_single_zone(zone_input, profile_name, tier, token, waf_only=False, cache_only=False, dry_run=False, extra_whitelist=None):
     profile_path = os.path.join(PROFILES_DIR, f"{profile_name}.json")
     if not os.path.exists(profile_path):
         print(f"Error: Profile '{profile_name}' not found in {PROFILES_DIR}", file=sys.stderr)
@@ -204,7 +207,7 @@ def deploy_single_zone(zone_input, profile_name, tier, token, waf_only=False, ca
     # 1. WAF Deployment
     if deploy_waf:
         print("\n--- [WAF RULES] ---")
-        waf_payload = build_waf_payload(profile, zone_name, tier=tier)
+        waf_payload = build_waf_payload(profile, zone_name, tier=tier, extra_whitelist=extra_whitelist)
         if dry_run:
             print("[DRY-RUN] WAF Payload:")
             print(json.dumps(waf_payload, indent=2))
@@ -267,11 +270,12 @@ def main():
 
     if args.list_sites:
         print("\n=== SITES INVENTORY (sites.json) ===")
-        print(f"{'Domain':<30} {'Profile':<15} {'Tier':<10} {'Description'}")
-        print("-" * 75)
+        print(f"{'Domain':<30} {'Profile':<15} {'Tier':<10} {'Extra Whitelist':<20} {'Description'}")
+        print("-" * 95)
         for domain, info in sorted(sites.items()):
-            print(f"{domain:<30} {info.get('profile', ''):<15} {info.get('tier', 'standard'):<10} {info.get('description', '')}")
-        print("-" * 75)
+            extra = ", ".join(info.get("extra_whitelist", [])) or "-"
+            print(f"{domain:<30} {info.get('profile', ''):<15} {info.get('tier', 'standard'):<10} {extra:<20} {info.get('description', '')}")
+        print("-" * 95)
         print(f"Total sites: {len(sites)}\n")
         return
 
@@ -290,7 +294,8 @@ def main():
         for domain, info in sites.items():
             profile_name = info.get("profile")
             tier = args.tier or info.get("tier", "standard")
-            ok = deploy_single_zone(domain, profile_name, tier, token, args.waf_only, args.cache_only, args.dry_run)
+            extra_whitelist = info.get("extra_whitelist", [])
+            ok = deploy_single_zone(domain, profile_name, tier, token, args.waf_only, args.cache_only, args.dry_run, extra_whitelist)
             if ok:
                 success_count += 1
         print(f"\nBatch deployment completed: {success_count}/{len(sites)} sites successful.")
@@ -310,8 +315,9 @@ def main():
         sys.exit(1)
 
     tier = args.tier or site_info.get("tier", "standard")
+    extra_whitelist = site_info.get("extra_whitelist", [])
 
-    deploy_single_zone(target_site, profile_name, tier, token, args.waf_only, args.cache_only, args.dry_run)
+    deploy_single_zone(target_site, profile_name, tier, token, args.waf_only, args.cache_only, args.dry_run, extra_whitelist)
 
 
 if __name__ == "__main__":

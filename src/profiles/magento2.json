@@ -23,7 +23,9 @@
       "paypal-webhook",
       "stripe-webhook",
       "bkn-webhook",
-      "satispay"
+      "satispay",
+      "ai-operations",
+      "thespace-manage"
     ],
     "verifylist": "verifylist-countries",
     "blacklist": "blacklist-magento2"

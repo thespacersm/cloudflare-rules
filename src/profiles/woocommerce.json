@@ -20,7 +20,9 @@
       "brevo",
       "paypal-webhook",
       "stripe-webhook",
-      "bkn-webhook"
+      "bkn-webhook",
+      "ai-operations",
+      "thespace-manage"
     ],
     "verifylist": "verifylist-countries",
     "blacklist": "blacklist-woocommerce"

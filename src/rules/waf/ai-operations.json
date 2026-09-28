@@ -1,0 +1,8 @@
+{
+  "id": "ai-operations",
+  "name": "Sync / API - AI Operations",
+  "category": "Sync / API",
+  "description": "Chiamate API del connettore AI Operations per l'integrazione con servizi esterni basati su intelligenza artificiale.",
+  "expression": "ip.src eq 94.177.9.11 and starts_with(http.user_agent, \"AI-Operations/\")",
+  "note": "Connettore AI Operations (IP + User-Agent dedicati, nessun vincolo di path)"
+}

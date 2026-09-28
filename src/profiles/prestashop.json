@@ -14,7 +14,8 @@
       "feeds",
       "trovaprezzi",
       "doofinder-path",
-      "m2epro"
+      "m2epro",
+      "thespace-manage"
     ],
     "verifylist": "verifylist-countries",
     "blacklist": "blacklist-prestashop"

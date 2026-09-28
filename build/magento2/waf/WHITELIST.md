@@ -136,6 +136,18 @@ Notifiche webhook, callback e chiamate API inviate dai server di Satispay.
 http.user_agent contains "Satispay" and (http.request.uri.path contains "satispay" or http.request.uri.query contains "satispay")
 ```
 
+#### Sync / API - AI Operations
+Chiamate API del connettore AI Operations per l'integrazione con servizi esterni basati su intelligenza artificiale.
+```text
+ip.src eq 94.177.9.11 and starts_with(http.user_agent, "AI-Operations/")
+```
+
+#### Gestionale - TheSpace Manage
+Chiamate della piattaforma interna di gestione TheSpace Manage per operazioni amministrative sui siti clienti.
+```text
+ip.src eq 138.199.169.63 and starts_with(http.user_agent, "ThespaceManage/")
+```
+
 ---
 
 ### Tabella di Riepilogo
@@ -163,11 +175,13 @@ http.user_agent contains "Satispay" and (http.request.uri.path contains "satispa
 | **Pagamenti** | `http.request.method eq "POST" and starts_with(http.user_agent, "Stripe/") and (http.request.uri.path contains "stripe" or http.request.uri.query contains "stripe")` | Webhook ufficiali Stripe (POST con User-Agent Stripe/) |
 | **Pagamenti** | `http.request.method eq "POST" and ip.src.country in {"SM" "IT"} and http.request.uri.path contains "bkn"` | Notifiche server BKN301 (POST da IT/SM) |
 | **Pagamenti** | `http.user_agent contains "Satispay" and (http.request.uri.path contains "satispay" or http.request.uri.query contains "satispay")` | Callback e webhook Satispay (User-Agent Satispay e URL satispay) |
+| **Sync / API** | `ip.src eq 94.177.9.11 and starts_with(http.user_agent, "AI-Operations/")` | Connettore AI Operations (IP + User-Agent dedicati, nessun vincolo di path) |
+| **Gestionale** | `ip.src eq 138.199.169.63 and starts_with(http.user_agent, "ThespaceManage/")` | Connettore TheSpace Manage (IP + User-Agent dedicati) |
 
 ---
 
 ### Espressione Completa (Cloudflare Expression Builder)
 
 ```text
-(ip.src in {54.171.4.216 52.2.218.41 18.143.220.25}) or (http.user_agent contains "Java" and ip.src.country eq "IT") or (ip.src.asnum in {15169 396982} and not http.user_agent contains "GoogleOther") or (cf.client.bot and http.user_agent contains "Google" and not http.user_agent contains "GoogleOther") or (cf.client.bot and http.user_agent contains "bingbot" and not http.request.uri.path contains "catalogsearch") or (http.user_agent contains "DaneaEasyfatt") or (http.user_agent contains "SPRIX" or ip.src eq 89.186.51.31) or (ip.src eq 49.12.69.209 and http.user_agent contains "Kuma") or (ends_with(http.request.uri.path, ".jpg") or ends_with(http.request.uri.path, ".jpeg") or ends_with(http.request.uri.path, ".png") or ends_with(http.request.uri.path, ".webp") or ends_with(http.request.uri.path, ".gif") or ends_with(http.request.uri.path, ".svg") or ends_with(http.request.uri.path, ".ico") or ends_with(http.request.uri.path, ".avif") or ends_with(http.request.uri.path, ".bmp") or ends_with(http.request.uri.path, ".tif") or ends_with(http.request.uri.path, ".tiff") or ends_with(http.request.uri.path, ".css") or ends_with(http.request.uri.path, ".js")) or (http.request.uri.path contains "feed") or (http.request.uri.path contains "trovaprezzi" or http.user_agent contains "PriceCrawlerBot") or (http.request.uri.path contains "doofinder") or (http.request.uri.path contains "M2ePro") or (http.request.uri.path contains "/rest/" and http.user_agent eq "Windsor/1.0") or (http.request.uri.path contains "/rest/" and starts_with(http.user_agent, "Motive/1.0 IndexRetriever")) or (http.request.uri.path contains "bridge_" and http.user_agent contains "Chrome/107.0.0.0") or (http.request.uri.path contains "/rest" and http.user_agent contains "TitanpicsSync") or (http.request.method eq "POST" and http.user_agent contains "PayPal" and (http.request.uri.path contains "paypal" or http.request.uri.query contains "paypal")) or (http.request.method eq "POST" and starts_with(http.user_agent, "Stripe/") and (http.request.uri.path contains "stripe" or http.request.uri.query contains "stripe")) or (http.request.method eq "POST" and ip.src.country in {"SM" "IT"} and http.request.uri.path contains "bkn") or (http.user_agent contains "Satispay" and (http.request.uri.path contains "satispay" or http.request.uri.query contains "satispay"))
+(ip.src in {54.171.4.216 52.2.218.41 18.143.220.25}) or (http.user_agent contains "Java" and ip.src.country eq "IT") or (ip.src.asnum in {15169 396982} and not http.user_agent contains "GoogleOther") or (cf.client.bot and http.user_agent contains "Google" and not http.user_agent contains "GoogleOther") or (cf.client.bot and http.user_agent contains "bingbot" and not http.request.uri.path contains "catalogsearch") or (http.user_agent contains "DaneaEasyfatt") or (http.user_agent contains "SPRIX" or ip.src eq 89.186.51.31) or (ip.src eq 49.12.69.209 and http.user_agent contains "Kuma") or (ends_with(http.request.uri.path, ".jpg") or ends_with(http.request.uri.path, ".jpeg") or ends_with(http.request.uri.path, ".png") or ends_with(http.request.uri.path, ".webp") or ends_with(http.request.uri.path, ".gif") or ends_with(http.request.uri.path, ".svg") or ends_with(http.request.uri.path, ".ico") or ends_with(http.request.uri.path, ".avif") or ends_with(http.request.uri.path, ".bmp") or ends_with(http.request.uri.path, ".tif") or ends_with(http.request.uri.path, ".tiff") or ends_with(http.request.uri.path, ".css") or ends_with(http.request.uri.path, ".js")) or (http.request.uri.path contains "feed") or (http.request.uri.path contains "trovaprezzi" or http.user_agent contains "PriceCrawlerBot") or (http.request.uri.path contains "doofinder") or (http.request.uri.path contains "M2ePro") or (http.request.uri.path contains "/rest/" and http.user_agent eq "Windsor/1.0") or (http.request.uri.path contains "/rest/" and starts_with(http.user_agent, "Motive/1.0 IndexRetriever")) or (http.request.uri.path contains "bridge_" and http.user_agent contains "Chrome/107.0.0.0") or (http.request.uri.path contains "/rest" and http.user_agent contains "TitanpicsSync") or (http.request.method eq "POST" and http.user_agent contains "PayPal" and (http.request.uri.path contains "paypal" or http.request.uri.query contains "paypal")) or (http.request.method eq "POST" and starts_with(http.user_agent, "Stripe/") and (http.request.uri.path contains "stripe" or http.request.uri.query contains "stripe")) or (http.request.method eq "POST" and ip.src.country in {"SM" "IT"} and http.request.uri.path contains "bkn") or (http.user_agent contains "Satispay" and (http.request.uri.path contains "satispay" or http.request.uri.query contains "satispay")) or (ip.src eq 94.177.9.11 and starts_with(http.user_agent, "AI-Operations/")) or (ip.src eq 138.199.169.63 and starts_with(http.user_agent, "ThespaceManage/"))
 ```
