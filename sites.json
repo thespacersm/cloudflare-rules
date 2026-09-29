@@ -56,5 +56,15 @@
     "extra_whitelist": [
       "kitchenoo-ips"
     ]
+  },
+  "ninalilou.com": {
+    "profile": "woocommerce",
+    "tier": "standard",
+    "description": "Nina Lilou"
+  },
+  "vivafarmacia.it": {
+    "profile": "magento2",
+    "tier": "standard",
+    "description": "Viva Farmacia"
   }
 }
