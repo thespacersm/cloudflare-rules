@@ -48,5 +48,13 @@
     "profile": "magento1",
     "tier": "standard",
     "description": "Softair Rastelli"
+  },
+  "kitchenoo.it": {
+    "profile": "woocommerce",
+    "tier": "standard",
+    "description": "Kitchenoo",
+    "extra_whitelist": [
+      "kitchenoo-ips"
+    ]
   }
 }

@@ -1,0 +1,8 @@
+{
+  "id": "kitchenoo-ips",
+  "name": "Kitchenoo - IP server OVH",
+  "category": "Integrazioni",
+  "description": "Server OVH già in whitelist su kitchenoo.it prima della migrazione al repo. Uso non identificato, da usare solo su kitchenoo.it.",
+  "expression": "ip.src in {147.135.137.31 147.135.137.18 147.135.136.178 54.37.80.17 141.95.207.193}",
+  "note": "IP OVH legacy kitchenoo.it"
+}
