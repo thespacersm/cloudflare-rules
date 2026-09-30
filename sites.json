@@ -66,5 +66,17 @@
     "profile": "magento2",
     "tier": "standard",
     "description": "Viva Farmacia"
+  },
+  "thespacesm.com": {
+    "profile": "wordpress",
+    "tier": "standard",
+    "description": "TheSpace SM",
+    "cache": {
+      "tier": "static",
+      "extra_bypass": [
+        "/ts_proxy.php",
+        "/proxy.php"
+      ]
+    }
   }
 }

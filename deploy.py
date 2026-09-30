@@ -12,6 +12,7 @@ Usage:
 """
 
 import argparse
+import copy
 import json
 import os
 import sys
@@ -148,25 +149,42 @@ def build_waf_payload(profile, zone_name="", tier="standard", extra_whitelist=No
     return {"rules": waf_rules}
 
 
-def build_cache_payload(profile):
+CACHE_TIERS = {
+    "static": "fpc-static",
+    "catalog": "fpc-catalog",
+    "short": "fpc-short",
+}
+
+
+def build_cache_payload(profile, cache_cfg=None):
+    """cache_cfg: dict {tier, edge_ttl?, extra_bypass?}; None = profile default FPC + bypass."""
     title = profile["title"].upper()
-    fpc_id = profile["cache"]["fpc"]
+    cache_cfg = cache_cfg or {}
+    tier = cache_cfg.get("tier")
+    if tier and tier not in CACHE_TIERS:
+        raise ValueError(f"Unknown cache tier '{tier}'; valid: {list(CACHE_TIERS)}")
+    fpc_id = CACHE_TIERS[tier] if tier else profile["cache"]["fpc"]
+
     fpc_data = load_json(os.path.join(RULES_DIR, "cache", f"{fpc_id}.json"))
+    fpc_params = copy.deepcopy(fpc_data["action_parameters"])
+    if cache_cfg.get("edge_ttl"):
+        fpc_params["edge_ttl"] = {"mode": "override_origin", "default": int(cache_cfg["edge_ttl"])}
 
-    bypass_id = profile["cache"]["bypass"]
-    bypass_data = load_json(os.path.join(RULES_DIR, "cache", f"{bypass_id}.json"))
-
-    bypass_expr = " or ".join([f"({item['expr']})" for item in bypass_data["items"]])
+    bypass_data = load_json(os.path.join(RULES_DIR, "cache", f"{profile['cache']['bypass']}.json"))
+    bypass_parts = [f"({item['expr']})" for item in bypass_data["items"]]
+    for path in cache_cfg.get("extra_bypass", []):
+        bypass_parts.append(f'(http.request.uri.path contains "{path}")')
 
     # Notice: In Cloudflare Cache Rules, latter rules override earlier rules.
-    # Rule 1: FPC (Cache Everything for GET/HEAD)
+    # Rule 1: FPC (Cache Everything for GET/HEAD, TTL forced by us)
     # Rule 2: Bypass (CMS exceptions, positioned second for override)
+    label = f" [{tier.upper()}]" if tier else ""
     return {
         "rules": [
             {
                 "action": fpc_data["action"],
-                "action_parameters": fpc_data["action_parameters"],
-                "description": f"FULL PAGE CACHE (FPC) - {title}",
+                "action_parameters": fpc_params,
+                "description": f"FULL PAGE CACHE (FPC) - {title}{label}",
                 "enabled": True,
                 "expression": fpc_data["expression"]
             },
@@ -175,13 +193,13 @@ def build_cache_payload(profile):
                 "action_parameters": bypass_data["action_parameters"],
                 "description": f"CACHE WHITELIST (BYPASS) - {title}",
                 "enabled": True,
-                "expression": bypass_expr
+                "expression": " or ".join(bypass_parts)
             }
         ]
     }
 
 
-def deploy_single_zone(zone_input, profile_name, tier, token, waf_only=False, cache_only=False, dry_run=False, extra_whitelist=None):
+def deploy_single_zone(zone_input, profile_name, tier, token, waf_only=False, cache_only=False, dry_run=False, extra_whitelist=None, cache_cfg=None):
     profile_path = os.path.join(PROFILES_DIR, f"{profile_name}.json")
     if not os.path.exists(profile_path):
         print(f"Error: Profile '{profile_name}' not found in {PROFILES_DIR}", file=sys.stderr)
@@ -190,6 +208,9 @@ def deploy_single_zone(zone_input, profile_name, tier, token, waf_only=False, ca
     profile = load_json(profile_path)
     deploy_waf = not cache_only
     deploy_cache = not waf_only
+    if deploy_cache and cache_cfg is not None and not cache_cfg.get("tier"):
+        print(f"\n--- [CACHE RULES] --- skipped: no cache tier set in sites.json for '{zone_input}'")
+        deploy_cache = False
 
     zone_id = None
     zone_name = zone_input
@@ -229,7 +250,7 @@ def deploy_single_zone(zone_input, profile_name, tier, token, waf_only=False, ca
     # 2. Cache Deployment
     if deploy_cache:
         print("\n--- [CACHE RULES] ---")
-        cache_payload = build_cache_payload(profile)
+        cache_payload = build_cache_payload(profile, cache_cfg)
         if dry_run:
             print("[DRY-RUN] Cache Payload:")
             print(json.dumps(cache_payload, indent=2))
@@ -270,12 +291,13 @@ def main():
 
     if args.list_sites:
         print("\n=== SITES INVENTORY (sites.json) ===")
-        print(f"{'Domain':<30} {'Profile':<15} {'Tier':<10} {'Extra Whitelist':<20} {'Description'}")
-        print("-" * 95)
+        print(f"{'Domain':<30} {'Profile':<15} {'Tier':<10} {'Extra Whitelist':<20} {'Cache':<12} {'Description'}")
+        print("-" * 110)
         for domain, info in sorted(sites.items()):
             extra = ", ".join(info.get("extra_whitelist", [])) or "-"
-            print(f"{domain:<30} {info.get('profile', ''):<15} {info.get('tier', 'standard'):<10} {extra:<20} {info.get('description', '')}")
-        print("-" * 95)
+            cache = info.get("cache", {}).get("tier", "-")
+            print(f"{domain:<30} {info.get('profile', ''):<15} {info.get('tier', 'standard'):<10} {extra:<20} {cache:<12} {info.get('description', '')}")
+        print("-" * 110)
         print(f"Total sites: {len(sites)}\n")
         return
 
@@ -295,7 +317,8 @@ def main():
             profile_name = info.get("profile")
             tier = args.tier or info.get("tier", "standard")
             extra_whitelist = info.get("extra_whitelist", [])
-            ok = deploy_single_zone(domain, profile_name, tier, token, args.waf_only, args.cache_only, args.dry_run, extra_whitelist)
+            cache_cfg = info.get("cache", {})
+            ok = deploy_single_zone(domain, profile_name, tier, token, args.waf_only, args.cache_only, args.dry_run, extra_whitelist, cache_cfg)
             if ok:
                 success_count += 1
         print(f"\nBatch deployment completed: {success_count}/{len(sites)} sites successful.")
@@ -316,8 +339,10 @@ def main():
 
     tier = args.tier or site_info.get("tier", "standard")
     extra_whitelist = site_info.get("extra_whitelist", [])
+    # Sites in the inventory opt in to cache rules via "cache"; ad-hoc zones deploy all of them.
+    cache_cfg = site_info.get("cache", {}) if site_info else None
 
-    deploy_single_zone(target_site, profile_name, tier, token, args.waf_only, args.cache_only, args.dry_run, extra_whitelist)
+    deploy_single_zone(target_site, profile_name, tier, token, args.waf_only, args.cache_only, args.dry_run, extra_whitelist, cache_cfg)
 
 
 if __name__ == "__main__":

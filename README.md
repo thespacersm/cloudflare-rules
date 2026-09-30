@@ -125,3 +125,18 @@ python3 deploy.py --zone miostore.it --profile prestashop --cache-only
 python3 deploy.py --zone miostore.it --profile magento2 --dry-run
 ```
 
+### Regole cache per sito (`sites.json`)
+
+Per i siti in inventario la cache è **opt-in**: si deploya solo se c'è `cache.tier`. Senza il campo `deploy.py` salta la fase Cache (le regole già presenti su Cloudflare non vengono toccate). Le zone passate con `--zone` fuori inventario usano l'FPC di default del profilo.
+
+| Tier | Uso | Edge TTL (forzato) | Query string |
+|---|---|---|---|
+| `static` | sito full static | 30 giorni | ignorata |
+| `catalog` | e-commerce con filtri/ricerca | 1 giorno | in cache key, esclusi i parametri di tracking |
+| `short` | prezzi/stock variabili | 15 minuti | in cache key, esclusi i parametri di tracking |
+
+L'Edge TTL è sempre `override_origin`: i `Cache-Control` dell'origin (plugin compresi) vengono ignorati. Override opzionali per sito: `edge_ttl` (secondi) ed `extra_bypass` (path da non cachare).
+
+```json
+"thespacesm.com": { "profile": "wordpress", "tier": "standard", "description": "TheSpace SM", "cache": { "tier": "static" } }
+```

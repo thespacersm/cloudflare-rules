@@ -1,0 +1,26 @@
+{
+  "id": "fpc-static",
+  "name": "FULL PAGE CACHE (FPC) - STATIC",
+  "action": "set_cache_settings",
+  "action_parameters": {
+    "cache": true,
+    "edge_ttl": {
+      "mode": "override_origin",
+      "default": 2592000
+    },
+    "browser_ttl": {
+      "mode": "respect_origin"
+    },
+    "cache_key": {
+      "custom_key": {
+        "query_string": {
+          "exclude": {
+            "all": true
+          }
+        }
+      }
+    }
+  },
+  "description": "Sito full static: edge TTL forzato a 30 giorni (ignora Cache-Control dell'origin), query string ignorata.",
+  "expression": "http.request.method in {\"GET\" \"HEAD\"}"
+}

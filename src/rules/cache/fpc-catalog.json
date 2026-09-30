@@ -1,0 +1,37 @@
+{
+  "id": "fpc-catalog",
+  "name": "FULL PAGE CACHE (FPC) - CATALOG",
+  "action": "set_cache_settings",
+  "action_parameters": {
+    "cache": true,
+    "edge_ttl": {
+      "mode": "override_origin",
+      "default": 86400
+    },
+    "browser_ttl": {
+      "mode": "respect_origin"
+    },
+    "cache_key": {
+      "custom_key": {
+        "query_string": {
+          "exclude": {
+            "list": [
+              "utm_source",
+              "utm_medium",
+              "utm_campaign",
+              "utm_term",
+              "utm_content",
+              "gclid",
+              "fbclid",
+              "msclkid",
+              "gbraid",
+              "wbraid"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "description": "E-commerce con filtri e ricerca: edge TTL forzato a 1 giorno, query string nella cache key tranne i parametri di tracking.",
+  "expression": "http.request.method in {\"GET\" \"HEAD\"}"
+}
