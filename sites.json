@@ -78,5 +78,50 @@
         "/proxy.php"
       ]
     }
+  },
+  "dfn.sm": {
+    "profile": "magento2",
+    "tier": "standard",
+    "description": "Filatelia Numismatica (DFN)",
+    "cache": {
+      "tier": "catalog",
+      "cache_logged_in": true,
+      "standard_cache_key": true,
+      "extra_bypass": [
+        "/the-dfn",
+        "/customer/",
+        "/accounting/",
+        "/sales/",
+        "/firecheckout",
+        "/welcomearea/",
+        "/paypal/",
+        "/triveneto/",
+        "/braintree/",
+        "/vault/",
+        "/wishlist/",
+        "/productalert/",
+        "/xnotif/",
+        "/newsletter/",
+        "/customfields/",
+        "/orderattachment/",
+        "/cartsavingmessage/",
+        "/loginascustomer/",
+        "/stores/",
+        "/directory/",
+        "/cookie/",
+        "/page_cache/",
+        "/captcha/",
+        "/api/",
+        "/oauth"
+      ],
+      "bypass_except": [
+        "/customer/account/login"
+      ]
+    }
+  },
+  "invustore.com": {
+    "profile": "wordpress",
+    "tier": "standard",
+    "description": "Invustore"
   }
 }
