@@ -35,7 +35,8 @@
     {
       "title": "Cookie di Sessione e Stato Privato Magento 2",
       "desc": "Cookie generati per identificare sessioni PHP attive, chiavi CSRF del form o versioni del contenuto privato.",
-      "expr": "http.cookie contains \"PHPSESSID\" or http.cookie contains \"private_content_version\""
+      "expr": "http.cookie contains \"PHPSESSID\" or http.cookie contains \"private_content_version\"",
+      "session": true
     }
   ]
 }

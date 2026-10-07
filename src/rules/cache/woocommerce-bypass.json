@@ -30,12 +30,14 @@
     {
       "title": "Cookie di Sessione Carrello WooCommerce",
       "desc": "Cookie rilasciati da WooCommerce non appena un utente aggiunge un prodotto al carrello, necessari per non mostrare pagine cachate con carrello vuoto.",
-      "expr": "http.cookie contains \"woocommerce_items_in_cart\" or http.cookie contains \"woocommerce_cart_hash\" or http.cookie contains \"wp_woocommerce_session_\""
+      "expr": "http.cookie contains \"woocommerce_items_in_cart\" or http.cookie contains \"woocommerce_cart_hash\" or http.cookie contains \"wp_woocommerce_session_\"",
+      "session": true
     },
     {
       "title": "Cookie Utente Loggato WordPress",
       "desc": "Cookie generato all'autenticazione dell'utente (cliente o amministratore) per mostrare barre personalizzate e contenuti riservati.",
-      "expr": "http.cookie contains \"wordpress_logged_in_\""
+      "expr": "http.cookie contains \"wordpress_logged_in_\"",
+      "session": true
     }
   ]
 }

@@ -135,7 +135,17 @@ Per i siti in inventario la cache è **opt-in**: si deploya solo se c'è `cache.
 | `catalog` | e-commerce con filtri/ricerca | 1 giorno | in cache key, esclusi i parametri di tracking |
 | `short` | prezzi/stock variabili | 15 minuti | in cache key, esclusi i parametri di tracking |
 
-L'Edge TTL è sempre `override_origin`: i `Cache-Control` dell'origin (plugin compresi) vengono ignorati. Override opzionali per sito: `edge_ttl` (secondi) ed `extra_bypass` (path da non cachare).
+L'Edge TTL è sempre `override_origin`: i `Cache-Control` dell'origin (plugin compresi) vengono ignorati. Le risposte 5xx non vengono mai cachate (`no-store`) e le 4xx restano in cache solo 5 minuti, così un errore dell'origin sotto carico non resta servito per tutto il TTL.
+
+Override opzionali per sito:
+
+| Campo | Effetto |
+|---|---|
+| `edge_ttl` | Edge TTL in secondi al posto di quello del tier |
+| `extra_bypass` | Path (`contains`) da non cachare, in aggiunta a quelli del profilo |
+| `bypass_except` | Path cachati anche se matchano un bypass (es. `/customer/account/login` con `/customer/` in bypass) |
+| `standard_cache_key` | `true` usa la cache key standard di Cloudflare (query string completa). Necessario sui piani non Enterprise, che rifiutano le esclusioni dei parametri di tracking (`not entitled to use the custom cache key override`) |
+| `cache_logged_in` | `true` rimuove il bypass sui cookie di sessione: anche gli utenti loggati ricevono le pagine cachate. Solo se l'HTML è identico per tutti i clienti (nessun prezzo per gruppo, dati personali caricati via AJAX) |
 
 ```json
 "thespacesm.com": { "profile": "wordpress", "tier": "standard", "description": "TheSpace SM", "cache": { "tier": "static" } }

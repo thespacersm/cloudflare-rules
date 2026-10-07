@@ -30,12 +30,14 @@
     {
       "title": "Cookie di Sessione Frontend e Carrello",
       "desc": "Il cookie frontend identifica univocamente la sessione del visitatore in Magento 1 non appena interagisce con il carrello o effettua il login.",
-      "expr": "http.cookie contains \"frontend\""
+      "expr": "http.cookie contains \"frontend\"",
+      "session": true
     },
     {
       "title": "Cookie di Sessione Amministratore",
       "desc": "Cookie generato all'accesso dell'amministratore nel pannello di controllo.",
-      "expr": "http.cookie contains \"adminhtml\""
+      "expr": "http.cookie contains \"adminhtml\"",
+      "session": true
     }
   ]
 }

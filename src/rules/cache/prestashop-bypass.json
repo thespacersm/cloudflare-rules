@@ -30,7 +30,8 @@
     {
       "title": "Cookie di Sessione PrestaShop",
       "desc": "Cookie univoco di sessione generato da PrestaShop (inizia sempre per PrestaShop- seguito dall'hash dell'installazione) che mantiene il carrello e lo stato dell'utente.",
-      "expr": "http.cookie contains \"PrestaShop-\""
+      "expr": "http.cookie contains \"PrestaShop-\"",
+      "session": true
     }
   ]
 }

@@ -20,12 +20,14 @@
     {
       "title": "Cookie Utente Autenticato WordPress",
       "desc": "Cookie generato all'autenticazione dell'utente per mostrare la barra di amministrazione e contenuti riservati.",
-      "expr": "http.cookie contains \"wordpress_logged_in_\""
+      "expr": "http.cookie contains \"wordpress_logged_in_\"",
+      "session": true
     },
     {
       "title": "Cookie Autore Commenti",
       "desc": "Cookie memorizzato quando un visitatore lascia un commento per compilare automaticamente i campi.",
-      "expr": "http.cookie contains \"comment_author_\""
+      "expr": "http.cookie contains \"comment_author_\"",
+      "session": true
     }
   ]
 }
