@@ -73,9 +73,30 @@ def resolve_zone_id(zone_input, token):
     return zone_info["id"], zone_info["name"]
 
 
-def build_waf_payload(profile, zone_name="", tier="standard", extra_whitelist=None):
+MAX_EXPR_LEN = 4000       # Cloudflare limit is 4096 chars per expression; keep a margin
+MAX_CUSTOM_RULES = 5      # Free plan limit for WAF custom rules per zone
+
+
+def chunk_expressions(exprs, limit=MAX_EXPR_LEN):
+    """Greedy-pack expressions into OR-joined chunks, each at most `limit` chars."""
+    chunks, current = [], []
+    for e in exprs:
+        term = f"({e})"
+        if len(term) > limit:
+            raise ValueError(f"A single whitelist rule is {len(term)} chars, over the {limit} limit")
+        if current and len(" or ".join(current + [term])) > limit:
+            chunks.append(" or ".join(current))
+            current = []
+        current.append(term)
+    if current:
+        chunks.append(" or ".join(current))
+    return chunks
+
+
+def build_waf_payload(profile, zone_name="", tier="standard", extra_whitelist=None, site_whitelist=None, site_verifylist=None):
     title = profile["title"].upper()
-    rule_ids = list(profile["waf"]["whitelist"])
+    # A per-site "whitelist" in sites.json replaces the profile default list entirely.
+    rule_ids = list(site_whitelist if site_whitelist is not None else profile["waf"]["whitelist"])
     for r_id in extra_whitelist or []:
         if r_id not in rule_ids:
             rule_ids.append(r_id)
@@ -84,7 +105,7 @@ def build_waf_payload(profile, zone_name="", tier="standard", extra_whitelist=No
         r_path = os.path.join(RULES_DIR, "waf", f"{r_id}.json")
         rules.append(load_json(r_path))
 
-    whitelist_expr = " or ".join([f"({r['expression']})" for r in rules])
+    chunks = chunk_expressions([r["expression"] for r in rules])
 
     waf_rules = [
         {
@@ -106,18 +127,20 @@ def build_waf_payload(profile, zone_name="", tier="standard", extra_whitelist=No
                 ],
                 "ruleset": "current"
             },
-            "description": f"WHITELIST - {title}",
+            "description": f"WHITELIST - {title}" if len(chunks) == 1 else f"WHITELIST {i}/{len(chunks)} - {title}",
             "enabled": True,
-            "expression": whitelist_expr,
+            "expression": chunk,
             "logging": {
                 "enabled": True
             }
         }
+        for i, chunk in enumerate(chunks, 1)
     ]
 
     # 2. VERIFYLIST (Countries challenge)
     if "verifylist" in profile["waf"]:
-        vl_id = profile["waf"]["verifylist"]
+        # A per-site "verifylist" in sites.json replaces the profile default country rule.
+        vl_id = site_verifylist or profile["waf"]["verifylist"]
         vl_path = os.path.join(RULES_DIR, "waf", f"{vl_id}.json")
         vl_rule = load_json(vl_path)
         waf_rules.append({
@@ -146,6 +169,8 @@ def build_waf_payload(profile, zone_name="", tier="standard", extra_whitelist=No
             "expression": bl_expr
         })
 
+    if len(waf_rules) > MAX_CUSTOM_RULES:
+        raise ValueError(f"{len(waf_rules)} WAF rules needed, over the {MAX_CUSTOM_RULES} custom rules limit; trim the whitelist")
     return {"rules": waf_rules}
 
 
@@ -157,7 +182,8 @@ CACHE_TIERS = {
 
 
 def build_cache_payload(profile, cache_cfg=None):
-    """cache_cfg: dict {tier, edge_ttl?, extra_bypass?}; None = profile default FPC + bypass."""
+    """cache_cfg: dict {tier, edge_ttl?, extra_bypass?, bypass_except?, cache_logged_in?};
+    None = profile default FPC + bypass."""
     title = profile["title"].upper()
     cache_cfg = cache_cfg or {}
     tier = cache_cfg.get("tier")
@@ -168,12 +194,24 @@ def build_cache_payload(profile, cache_cfg=None):
     fpc_data = load_json(os.path.join(RULES_DIR, "cache", f"{fpc_id}.json"))
     fpc_params = copy.deepcopy(fpc_data["action_parameters"])
     if cache_cfg.get("edge_ttl"):
-        fpc_params["edge_ttl"] = {"mode": "override_origin", "default": int(cache_cfg["edge_ttl"])}
+        fpc_params["edge_ttl"]["default"] = int(cache_cfg["edge_ttl"])
+    # standard_cache_key: drop the custom cache key (query string exclusions need an Enterprise plan)
+    if cache_cfg.get("standard_cache_key"):
+        fpc_params.pop("cache_key", None)
 
     bypass_data = load_json(os.path.join(RULES_DIR, "cache", f"{profile['cache']['bypass']}.json"))
-    bypass_parts = [f"({item['expr']})" for item in bypass_data["items"]]
+    # cache_logged_in: session cookies no longer bypass, so logged-in users share the
+    # public cache. Only safe when the HTML is identical for every customer.
+    items = [item for item in bypass_data["items"]
+             if not (cache_cfg.get("cache_logged_in") and item.get("session"))]
+    bypass_parts = [f"({item['expr']})" for item in items]
     for path in cache_cfg.get("extra_bypass", []):
         bypass_parts.append(f'(http.request.uri.path contains "{path}")')
+    bypass_expr = " or ".join(bypass_parts)
+    # bypass_except: paths cached even if a bypass item matches them (e.g. login under /customer/)
+    except_parts = [f'http.request.uri.path contains "{path}"' for path in cache_cfg.get("bypass_except", [])]
+    if except_parts:
+        bypass_expr = f"({bypass_expr}) and not ({' or '.join(except_parts)})"
 
     # Notice: In Cloudflare Cache Rules, latter rules override earlier rules.
     # Rule 1: FPC (Cache Everything for GET/HEAD, TTL forced by us)
@@ -193,13 +231,13 @@ def build_cache_payload(profile, cache_cfg=None):
                 "action_parameters": bypass_data["action_parameters"],
                 "description": f"CACHE WHITELIST (BYPASS) - {title}",
                 "enabled": True,
-                "expression": " or ".join(bypass_parts)
+                "expression": bypass_expr
             }
         ]
     }
 
 
-def deploy_single_zone(zone_input, profile_name, tier, token, waf_only=False, cache_only=False, dry_run=False, extra_whitelist=None, cache_cfg=None):
+def deploy_single_zone(zone_input, profile_name, tier, token, waf_only=False, cache_only=False, dry_run=False, extra_whitelist=None, cache_cfg=None, site_whitelist=None, site_verifylist=None):
     profile_path = os.path.join(PROFILES_DIR, f"{profile_name}.json")
     if not os.path.exists(profile_path):
         print(f"Error: Profile '{profile_name}' not found in {PROFILES_DIR}", file=sys.stderr)
@@ -228,7 +266,7 @@ def deploy_single_zone(zone_input, profile_name, tier, token, waf_only=False, ca
     # 1. WAF Deployment
     if deploy_waf:
         print("\n--- [WAF RULES] ---")
-        waf_payload = build_waf_payload(profile, zone_name, tier=tier, extra_whitelist=extra_whitelist)
+        waf_payload = build_waf_payload(profile, zone_name, tier=tier, extra_whitelist=extra_whitelist, site_whitelist=site_whitelist, site_verifylist=site_verifylist)
         if dry_run:
             print("[DRY-RUN] WAF Payload:")
             print(json.dumps(waf_payload, indent=2))
@@ -294,7 +332,7 @@ def main():
         print(f"{'Domain':<30} {'Profile':<15} {'Tier':<10} {'Extra Whitelist':<20} {'Cache':<12} {'Description'}")
         print("-" * 110)
         for domain, info in sorted(sites.items()):
-            extra = ", ".join(info.get("extra_whitelist", [])) or "-"
+            extra = ("custom:%d" % len(info["whitelist"]) if "whitelist" in info else "profile") + ("+%d" % len(info["extra_whitelist"]) if info.get("extra_whitelist") else "")
             cache = info.get("cache", {}).get("tier", "-")
             print(f"{domain:<30} {info.get('profile', ''):<15} {info.get('tier', 'standard'):<10} {extra:<20} {cache:<12} {info.get('description', '')}")
         print("-" * 110)
@@ -318,7 +356,7 @@ def main():
             tier = args.tier or info.get("tier", "standard")
             extra_whitelist = info.get("extra_whitelist", [])
             cache_cfg = info.get("cache", {})
-            ok = deploy_single_zone(domain, profile_name, tier, token, args.waf_only, args.cache_only, args.dry_run, extra_whitelist, cache_cfg)
+            ok = deploy_single_zone(domain, profile_name, tier, token, args.waf_only, args.cache_only, args.dry_run, extra_whitelist, cache_cfg, info.get("whitelist"), info.get("verifylist"))
             if ok:
                 success_count += 1
         print(f"\nBatch deployment completed: {success_count}/{len(sites)} sites successful.")
@@ -342,7 +380,7 @@ def main():
     # Sites in the inventory opt in to cache rules via "cache"; ad-hoc zones deploy all of them.
     cache_cfg = site_info.get("cache", {}) if site_info else None
 
-    deploy_single_zone(target_site, profile_name, tier, token, args.waf_only, args.cache_only, args.dry_run, extra_whitelist, cache_cfg)
+    deploy_single_zone(target_site, profile_name, tier, token, args.waf_only, args.cache_only, args.dry_run, extra_whitelist, cache_cfg, site_info.get("whitelist"), site_info.get("verifylist"))
 
 
 if __name__ == "__main__":

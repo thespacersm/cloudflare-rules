@@ -1,0 +1,8 @@
+{
+  "id": "catchr",
+  "name": "Sync / API - Catchr",
+  "category": "Sync / API",
+  "description": "Connettore Catchr (reportistica/data connector) che legge le API WooCommerce da IP OVH dedicati. IP ufficiali comunicati da Catchr.",
+  "expression": "ip.src in {141.95.207.193 54.37.80.17 147.135.136.178 147.135.137.18 147.135.137.31}",
+  "note": "IP ufficiali Catchr"
+}

@@ -1,0 +1,8 @@
+{
+  "id": "eshoppingadvisor",
+  "name": "Sync / API - eShoppingAdvisor",
+  "category": "Sync / API",
+  "description": "Connettore eShoppingAdvisor che legge le API REST WooCommerce (es. /wp-json/wc/v3/orders) da server Hetzner in Finlandia. Ramo 1: IP osservati (204.168.196.0/24, 204.168.198.0/24) con qualsiasi UA, perche' usa anche UA da browser. Ramo 2: UA EsaCmsApiIntegrations dal /17 Hetzner 204.168.128.0/17, se ruotano gli IP. Senza whitelist il blocco per paese (VERIFYLIST) lo sfida e la sync fallisce con 403.",
+  "expression": "(ip.src in {204.168.196.0/24 204.168.198.0/24} and starts_with(http.request.uri.path, \"/wp-json/wc/\")) or (http.user_agent contains \"EsaCmsApiIntegrations\" and ip.src in {204.168.128.0/17} and starts_with(http.request.uri.path, \"/wp-json/wc/\"))",
+  "note": "eShoppingAdvisor su API WooCommerce (IP /24 osservati, oppure UA nel /17 Hetzner)"
+}

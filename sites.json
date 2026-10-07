@@ -54,7 +54,7 @@
     "tier": "standard",
     "description": "Kitchenoo",
     "extra_whitelist": [
-      "kitchenoo-ips"
+      "catchr"
     ]
   },
   "ninalilou.com": {
@@ -123,5 +123,43 @@
     "profile": "wordpress",
     "tier": "standard",
     "description": "Invustore"
+  },
+  "kikkoutensili.it": {
+    "profile": "woocommerce",
+    "tier": "standard",
+    "description": "Kikko Utensili",
+    "whitelist": [
+      "doofinder",
+      "java-payments",
+      "google-asn",
+      "google-bot",
+      "bing-bot",
+      "danea",
+      "m2epro",
+      "paypal-webhook",
+      "stripe-webhook",
+      "bkn-webhook",
+      "doofinder-path",
+      "trovaprezzi",
+      "feeds",
+      "uptime-kuma",
+      "sectigo-dcv",
+      "static-assets",
+      "sprix",
+      "meta-bot",
+      "eshoppingadvisor",
+      "catchr",
+      "unknown-kikko-whitelist1",
+      "netrivals",
+      "seozoom",
+      "kikkoutensili-legacy",
+      "thespace-manage"
+    ]
+  },
+  "athenagioielli.com": {
+    "profile": "woocommerce",
+    "tier": "standard",
+    "description": "Athena Gioielli",
+    "verifylist": "verifylist-athena"
   }
 }

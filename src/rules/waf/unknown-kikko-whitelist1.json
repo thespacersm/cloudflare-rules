@@ -1,0 +1,8 @@
+{
+  "id": "unknown-kikko-whitelist1",
+  "name": "Unknown - Kikko whitelist 1 (WooCommerce API Client, AWS Francoforte)",
+  "category": "Sync / API",
+  "description": "Client PHP WooCommerce (UA WooCommerce API Client-PHP) che legge /wc-api/ (API legacy) da 4 IP AWS Francoforte. Servizio non ancora identificato: da sostituire con il nome e gli IP ufficiali del fornitore. Solo kikkoutensili.it.",
+  "expression": "ip.src in {63.178.243.143 3.67.10.157 52.29.126.106 3.70.234.56} and starts_with(http.user_agent, \"WooCommerce API Client\") and starts_with(http.request.uri.path, \"/wc-api/\")",
+  "note": "WooCommerce API Client da 4 IP AWS DE su /wc-api/"
+}

@@ -1,0 +1,8 @@
+{
+  "id": "seozoom",
+  "name": "SEO - SEOZoom Zoombot",
+  "category": "Bot",
+  "description": "Crawler SEOZoom (Zoombot / SEOChecker, suite.seozoom.it) usato per audit SEO. Limitato a UA Zoombot dall'IP osservato 5.249.157.200.",
+  "expression": "http.user_agent contains \"Zoombot\" and ip.src eq 5.249.157.200",
+  "note": "SEOZoom Zoombot da 5.249.157.200"
+}

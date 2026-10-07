@@ -1,0 +1,9 @@
+{
+  "id": "verifylist-athena",
+  "name": "Blocco paesi - Athena Gioielli",
+  "category": "Verifylist",
+  "action": "managed_challenge",
+  "description": "Challenge per i visitatori fuori dai paesi gia' consentiti su athenagioielli.com (21 paesi europei piu' VA). Gli USA sono volutamente esclusi, per mantenere il blocco USA che c'era (Google/Bing e altri connettori passano dalla whitelist). La VERIFYLIST di default del profilo consente solo IT, SM, VA.",
+  "expression": "not ip.src.country in {\"AT\" \"BE\" \"FI\" \"FR\" \"DE\" \"GR\" \"HU\" \"IE\" \"IT\" \"LU\" \"NL\" \"NO\" \"PT\" \"SM\" \"SK\" \"SI\" \"ES\" \"SE\" \"CH\" \"GB\" \"VA\"}",
+  "note": "Paesi consentiti athenagioielli.com"
+}
