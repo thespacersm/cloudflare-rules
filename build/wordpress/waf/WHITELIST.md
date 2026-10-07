@@ -52,10 +52,10 @@ Sonda di monitoraggio Uptime Kuma per il controllo costante di disponibilità de
 ip.src eq 49.12.69.209 and http.user_agent contains "Kuma"
 ```
 
-#### Certificati SSL - Sectigo DCV
-Validatore di dominio (DCV) di Sectigo, che chiama da IP esteri i file sotto /.well-known/ per emettere e rinnovare i certificati SSL. Senza whitelist VERIFYLIST lo sfida e la validazione fallisce.
+#### Certificati SSL - /.well-known/
+Validazione dei certificati SSL (ACME / DCV): Let's Encrypt, Sectigo e altre CA chiamano da IP esteri i file sotto /.well-known/ per emettere e rinnovare i certificati. Senza whitelist VERIFYLIST li sfida e la validazione fallisce. Sbloccato a prescindere dall'user-agent, perche' ogni CA usa un UA diverso.
 ```text
-http.user_agent contains "Sectigo DCV" and starts_with(http.request.uri.path, "/.well-known/")
+starts_with(http.request.uri.path, "/.well-known/")
 ```
 
 #### Estensioni Asset Statici (CSS, JS, Media)
@@ -113,7 +113,7 @@ ip.src eq 138.199.169.63 and starts_with(http.user_agent, "ThespaceManage/")
 | **Bot Ufficiali** | `cf.client.bot and http.user_agent contains "bingbot" and not http.request.uri.path contains "catalogsearch"` | Crawler Bing verificato (escluso catalogsearch) |
 | **Gestionale** | `http.user_agent contains "DaneaEasyfatt"` | Sincronizzazione Danea Easyfatt |
 | **Monitoraggio** | `ip.src eq 49.12.69.209 and http.user_agent contains "Kuma"` | Uptime Kuma probe |
-| **Certificati** | `http.user_agent contains "Sectigo DCV" and starts_with(http.request.uri.path, "/.well-known/")` | Sectigo DCV su /.well-known/ |
+| **Certificati** | `starts_with(http.request.uri.path, "/.well-known/")` | Tutto /.well-known/ (validazione certificati, qualsiasi CA) |
 | **File Statici** | `http.request.uri.path.extension in {"jpg" "jpeg" "png" "webp" "gif" "svg" "ico" "avif" "bmp" "tif" "tiff" "css" "js"}` | Bypass per CSS, JS, immagini e asset statici |
 | **Path / Feed** | `http.request.uri.path contains "feed"` | Feed prodotti |
 | **Path / Feed** | `http.request.uri.path contains "trovaprezzi" or http.user_agent contains "PriceCrawlerBot"` | Crawler / bot TrovaPrezzi (path o User-Agent PriceCrawlerBot) |
@@ -127,5 +127,5 @@ ip.src eq 138.199.169.63 and starts_with(http.user_agent, "ThespaceManage/")
 ### Espressione Completa (Cloudflare Expression Builder)
 
 ```text
-(ip.src in {54.171.4.216 52.2.218.41 18.143.220.25}) or (http.user_agent contains "Java" and ip.src.country eq "IT") or (ip.src.asnum in {15169 396982}) or (cf.client.bot and http.user_agent contains "Google") or (cf.client.bot and http.user_agent contains "bingbot" and not http.request.uri.path contains "catalogsearch") or (http.user_agent contains "DaneaEasyfatt") or (ip.src eq 49.12.69.209 and http.user_agent contains "Kuma") or (http.user_agent contains "Sectigo DCV" and starts_with(http.request.uri.path, "/.well-known/")) or (http.request.uri.path.extension in {"jpg" "jpeg" "png" "webp" "gif" "svg" "ico" "avif" "bmp" "tif" "tiff" "css" "js"}) or (http.request.uri.path contains "feed") or (http.request.uri.path contains "trovaprezzi" or http.user_agent contains "PriceCrawlerBot") or (http.request.uri.path contains "doofinder") or (http.request.uri.path contains "M2ePro") or ((ip.src.asnum eq 2635) or (http.user_agent contains "Jetpack") or (http.user_agent contains "WordPress.com") or (http.request.uri.path contains "/wp-json/jetpack/")) or (ip.src eq 138.199.169.63 and starts_with(http.user_agent, "ThespaceManage/"))
+(ip.src in {54.171.4.216 52.2.218.41 18.143.220.25}) or (http.user_agent contains "Java" and ip.src.country eq "IT") or (ip.src.asnum in {15169 396982}) or (cf.client.bot and http.user_agent contains "Google") or (cf.client.bot and http.user_agent contains "bingbot" and not http.request.uri.path contains "catalogsearch") or (http.user_agent contains "DaneaEasyfatt") or (ip.src eq 49.12.69.209 and http.user_agent contains "Kuma") or (starts_with(http.request.uri.path, "/.well-known/")) or (http.request.uri.path.extension in {"jpg" "jpeg" "png" "webp" "gif" "svg" "ico" "avif" "bmp" "tif" "tiff" "css" "js"}) or (http.request.uri.path contains "feed") or (http.request.uri.path contains "trovaprezzi" or http.user_agent contains "PriceCrawlerBot") or (http.request.uri.path contains "doofinder") or (http.request.uri.path contains "M2ePro") or ((ip.src.asnum eq 2635) or (http.user_agent contains "Jetpack") or (http.user_agent contains "WordPress.com") or (http.request.uri.path contains "/wp-json/jetpack/")) or (ip.src eq 138.199.169.63 and starts_with(http.user_agent, "ThespaceManage/"))
 ```

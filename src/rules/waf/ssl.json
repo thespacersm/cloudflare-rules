@@ -1,0 +1,8 @@
+{
+  "id": "ssl",
+  "name": "Certificati SSL - /.well-known/",
+  "category": "Certificati",
+  "description": "Validazione dei certificati SSL (ACME / DCV): Let's Encrypt, Sectigo e altre CA chiamano da IP esteri i file sotto /.well-known/ per emettere e rinnovare i certificati. Senza whitelist VERIFYLIST li sfida e la validazione fallisce. Sbloccato a prescindere dall'user-agent, perche' ogni CA usa un UA diverso.",
+  "expression": "starts_with(http.request.uri.path, \"/.well-known/\")",
+  "note": "Tutto /.well-known/ (validazione certificati, qualsiasi CA)"
+}
