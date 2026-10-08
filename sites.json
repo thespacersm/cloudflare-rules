@@ -120,7 +120,7 @@
     }
   },
   "invustore.com": {
-    "profile": "wordpress",
+    "profile": "woocommerce",
     "tier": "standard",
     "description": "Invustore"
   },
@@ -159,8 +159,7 @@
   "athenagioielli.com": {
     "profile": "woocommerce",
     "tier": "standard",
-    "description": "Athena Gioielli",
-    "verifylist": "verifylist-athena"
+    "description": "Athena Gioielli"
   },
   "thestrategysm.com": {
     "profile": "wordpress",
@@ -187,7 +186,6 @@
     "profile": "woocommerce",
     "tier": "standard",
     "description": "Fama Industrie",
-    "verifylist": "verifylist-famaindustrie",
     "cache": {
       "tier": "catalog",
       "standard_cache_key": true,
