@@ -161,5 +161,26 @@
     "tier": "standard",
     "description": "Athena Gioielli",
     "verifylist": "verifylist-athena"
+  },
+  "thestrategysm.com": {
+    "profile": "wordpress",
+    "tier": "standard",
+    "description": "The Strategy SM",
+    "cache": {
+      "tier": "static"
+    }
+  },
+  "sinfoniacaffe.com": {
+    "profile": "woocommerce",
+    "tier": "standard",
+    "description": "Sinfonia Caffè",
+    "cache": {
+      "tier": "short",
+      "standard_cache_key": true,
+      "only_paths": [
+        "/"
+      ],
+      "edge_ttl": 86400
+    }
   }
 }

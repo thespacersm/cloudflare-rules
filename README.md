@@ -137,6 +137,8 @@ Per i siti in inventario la cache è **opt-in**: si deploya solo se c'è `cache.
 
 L'Edge TTL è sempre `override_origin`: i `Cache-Control` dell'origin (plugin compresi) vengono ignorati. Le risposte 5xx non vengono mai cachate (`no-store`) e le 4xx restano in cache solo 5 minuti, così un errore dell'origin sotto carico non resta servito per tutto il TTL.
 
+I bypass basati su cookie di sessione (voci con `session: true`) non si applicano ai file statici (css, js, immagini, font): gli utenti loggati ricevono comunque gli asset dalla cache edge. I bypass per path (admin, login, API) restano validi per tutte le estensioni.
+
 Override opzionali per sito:
 
 | Campo | Effetto |
@@ -146,6 +148,7 @@ Override opzionali per sito:
 | `bypass_except` | Path cachati anche se matchano un bypass (es. `/customer/account/login` con `/customer/` in bypass) |
 | `standard_cache_key` | `true` usa la cache key standard di Cloudflare (query string completa). Necessario sui piani non Enterprise, che rifiutano le esclusioni dei parametri di tracking (`not entitled to use the custom cache key override`) |
 | `cache_logged_in` | `true` rimuove il bypass sui cookie di sessione: anche gli utenti loggati ricevono le pagine cachate. Solo se l'HTML è identico per tutti i clienti (nessun prezzo per gruppo, dati personali caricati via AJAX) |
+| `only_paths` | Cacha solo questi path esatti (es. `["/"]` = solo homepage) invece di ogni `GET`/`HEAD` |
 
 ```json
 "thespacesm.com": { "profile": "wordpress", "tier": "standard", "description": "TheSpace SM", "cache": { "tier": "static" } }

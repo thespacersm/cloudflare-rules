@@ -181,8 +181,14 @@ CACHE_TIERS = {
 }
 
 
+# Static files are identical for every visitor, so session-cookie bypass items must not apply
+# to them (otherwise logged-in users never get CSS/JS/images from the edge cache).
+CACHE_STATIC_EXTENSIONS = ("css", "js", "jpg", "jpeg", "png", "gif", "webp", "avif", "svg", "ico",
+                           "bmp", "tif", "tiff", "woff", "woff2", "ttf", "otf", "eot")
+
+
 def build_cache_payload(profile, cache_cfg=None):
-    """cache_cfg: dict {tier, edge_ttl?, extra_bypass?, bypass_except?, cache_logged_in?};
+    """cache_cfg: dict {tier, edge_ttl?, extra_bypass?, bypass_except?, cache_logged_in?, only_paths?};
     None = profile default FPC + bypass."""
     title = profile["title"].upper()
     cache_cfg = cache_cfg or {}
@@ -204,7 +210,12 @@ def build_cache_payload(profile, cache_cfg=None):
     # public cache. Only safe when the HTML is identical for every customer.
     items = [item for item in bypass_data["items"]
              if not (cache_cfg.get("cache_logged_in") and item.get("session"))]
-    bypass_parts = [f"({item['expr']})" for item in items]
+    static_ext = "{" + " ".join(f'"{e}"' for e in CACHE_STATIC_EXTENSIONS) + "}"
+    bypass_parts = [
+        f"(({item['expr']}) and not http.request.uri.path.extension in {static_ext})" if item.get("session")
+        else f"({item['expr']})"
+        for item in items
+    ]
     for path in cache_cfg.get("extra_bypass", []):
         bypass_parts.append(f'(http.request.uri.path contains "{path}")')
     bypass_expr = " or ".join(bypass_parts)
@@ -212,6 +223,19 @@ def build_cache_payload(profile, cache_cfg=None):
     except_parts = [f'http.request.uri.path contains "{path}"' for path in cache_cfg.get("bypass_except", [])]
     if except_parts:
         bypass_expr = f"({bypass_expr}) and not ({' or '.join(except_parts)})"
+
+    # Cache rule settings merge across matching rules: a bypass that only sets cache=false would
+    # still inherit a forced browser TTL from the FPC rule (admin, login, API cached in browsers).
+    # Reset it to respect_origin on bypassed requests.
+    bypass_params = copy.deepcopy(bypass_data["action_parameters"])
+    if fpc_params.get("browser_ttl", {}).get("mode") == "override_origin":
+        bypass_params["browser_ttl"] = {"mode": "respect_origin"}
+
+    # only_paths: cache just these exact paths (e.g. ["/"] = homepage only) instead of every GET/HEAD.
+    fpc_expr = fpc_data["expression"]
+    if cache_cfg.get("only_paths"):
+        paths = " ".join(f'"{p}"' for p in cache_cfg["only_paths"])
+        fpc_expr = f"({fpc_expr}) and http.request.uri.path in {{{paths}}}"
 
     # Notice: In Cloudflare Cache Rules, latter rules override earlier rules.
     # Rule 1: FPC (Cache Everything for GET/HEAD, TTL forced by us)
@@ -224,11 +248,11 @@ def build_cache_payload(profile, cache_cfg=None):
                 "action_parameters": fpc_params,
                 "description": f"FULL PAGE CACHE (FPC) - {title}{label}",
                 "enabled": True,
-                "expression": fpc_data["expression"]
+                "expression": fpc_expr
             },
             {
                 "action": bypass_data["action"],
-                "action_parameters": bypass_data["action_parameters"],
+                "action_parameters": bypass_params,
                 "description": f"CACHE WHITELIST (BYPASS) - {title}",
                 "enabled": True,
                 "expression": bypass_expr
