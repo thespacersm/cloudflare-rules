@@ -182,5 +182,16 @@
       ],
       "edge_ttl": 86400
     }
+  },
+  "famaindustrie.com": {
+    "profile": "woocommerce",
+    "tier": "standard",
+    "description": "Fama Industrie",
+    "verifylist": "verifylist-famaindustrie",
+    "cache": {
+      "tier": "catalog",
+      "standard_cache_key": true,
+      "edge_ttl": 14400
+    }
   }
 }

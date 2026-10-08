@@ -1,0 +1,9 @@
+{
+  "id": "verifylist-famaindustrie",
+  "name": "Blocco paesi - Fama Industrie",
+  "category": "Verifylist",
+  "action": "managed_challenge",
+  "description": "Challenge per i visitatori fuori dai paesi consentiti su famaindustrie.com (22 paesi europei piu' PL e VA, ex BLOCCO NAZIONI). Gli USA sono volutamente esclusi, per mantenere il blocco USA che c'era. La VERIFYLIST di default consente solo IT, SM, VA.",
+  "expression": "not ip.src.country in {\"AT\" \"BE\" \"FI\" \"FR\" \"DE\" \"GR\" \"HU\" \"IE\" \"IT\" \"LU\" \"NL\" \"NO\" \"PT\" \"SM\" \"SK\" \"SI\" \"ES\" \"SE\" \"CH\" \"GB\" \"VA\" \"PL\"}",
+  "note": "Paesi consentiti famaindustrie.com"
+}
