@@ -191,5 +191,15 @@
       "standard_cache_key": true,
       "edge_ttl": 14400
     }
+  },
+  "gioiellitamburini.com": {
+    "profile": "woocommerce",
+    "tier": "standard",
+    "description": "Gioielli Tamburini"
+  },
+  "kissrimini.com": {
+    "profile": "woocommerce",
+    "tier": "standard",
+    "description": "Kiss Rimini"
   }
 }
