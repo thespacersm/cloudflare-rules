@@ -118,6 +118,12 @@ Notifiche server-to-server di conferma transazione dai gateway BKN301 (Banca di 
 http.request.method eq "POST" and ip.src.country in {"SM" "IT"} and http.request.uri.path contains "bkn"
 ```
 
+#### Sync / API - Catchr
+Connettore Catchr (reportistica/data connector) che legge le API WooCommerce da IP OVH dedicati. IP ufficiali comunicati da Catchr.
+```text
+ip.src in {141.95.207.193 54.37.80.17 147.135.136.178 147.135.137.18 147.135.137.31}
+```
+
 #### Gestionale - TheSpace Manage
 Chiamate della piattaforma interna di gestione TheSpace Manage per operazioni amministrative sui siti clienti.
 ```text
@@ -148,6 +154,7 @@ ip.src eq 138.199.169.63 and starts_with(http.user_agent, "ThespaceManage/")
 | **Pagamenti** | `http.request.method eq "POST" and http.user_agent contains "PayPal" and (http.request.uri.path contains "paypal" or http.request.uri.query contains "paypal")` | Notifiche IPN e webhook PayPal (POST con User-Agent PayPal) |
 | **Pagamenti** | `http.request.method eq "POST" and starts_with(http.user_agent, "Stripe/") and (http.request.uri.path contains "stripe" or http.request.uri.query contains "stripe")` | Webhook ufficiali Stripe (POST con User-Agent Stripe/) |
 | **Pagamenti** | `http.request.method eq "POST" and ip.src.country in {"SM" "IT"} and http.request.uri.path contains "bkn"` | Notifiche server BKN301 (POST da IT/SM) |
+| **Sync / API** | `ip.src in {141.95.207.193 54.37.80.17 147.135.136.178 147.135.137.18 147.135.137.31}` | IP ufficiali Catchr |
 | **Gestionale** | `ip.src eq 138.199.169.63 and starts_with(http.user_agent, "ThespaceManage/")` | Connettore TheSpace Manage (IP + User-Agent dedicati) |
 
 ---
@@ -155,5 +162,5 @@ ip.src eq 138.199.169.63 and starts_with(http.user_agent, "ThespaceManage/")
 ### Espressione Completa (Cloudflare Expression Builder)
 
 ```text
-(ip.src in {54.171.4.216 52.2.218.41 18.143.220.25}) or (http.user_agent contains "Java" and ip.src.country eq "IT") or (ip.src.asnum in {15169 396982}) or (cf.client.bot and http.user_agent contains "Google") or (cf.client.bot and http.user_agent contains "bingbot" and not http.request.uri.path contains "catalogsearch") or (http.user_agent contains "DaneaEasyfatt") or (http.user_agent contains "SPRIX" or ip.src eq 89.186.51.31) or (ip.src eq 49.12.69.209 and http.user_agent contains "Kuma") or (starts_with(http.request.uri.path, "/.well-known/")) or (http.request.uri.path.extension in {"jpg" "jpeg" "png" "webp" "gif" "svg" "ico" "avif" "bmp" "tif" "tiff" "css" "js"}) or (http.request.uri.path contains "feed") or (http.request.uri.path contains "trovaprezzi" or http.user_agent contains "PriceCrawlerBot") or (http.request.uri.path contains "doofinder") or (http.request.uri.path contains "M2ePro") or (http.request.uri.path contains "/rest/" and http.user_agent eq "Windsor/1.0") or (http.request.method eq "POST" and http.user_agent contains "PayPal" and (http.request.uri.path contains "paypal" or http.request.uri.query contains "paypal")) or (http.request.method eq "POST" and starts_with(http.user_agent, "Stripe/") and (http.request.uri.path contains "stripe" or http.request.uri.query contains "stripe")) or (http.request.method eq "POST" and ip.src.country in {"SM" "IT"} and http.request.uri.path contains "bkn") or (ip.src eq 138.199.169.63 and starts_with(http.user_agent, "ThespaceManage/"))
+(ip.src in {54.171.4.216 52.2.218.41 18.143.220.25}) or (http.user_agent contains "Java" and ip.src.country eq "IT") or (ip.src.asnum in {15169 396982}) or (cf.client.bot and http.user_agent contains "Google") or (cf.client.bot and http.user_agent contains "bingbot" and not http.request.uri.path contains "catalogsearch") or (http.user_agent contains "DaneaEasyfatt") or (http.user_agent contains "SPRIX" or ip.src eq 89.186.51.31) or (ip.src eq 49.12.69.209 and http.user_agent contains "Kuma") or (starts_with(http.request.uri.path, "/.well-known/")) or (http.request.uri.path.extension in {"jpg" "jpeg" "png" "webp" "gif" "svg" "ico" "avif" "bmp" "tif" "tiff" "css" "js"}) or (http.request.uri.path contains "feed") or (http.request.uri.path contains "trovaprezzi" or http.user_agent contains "PriceCrawlerBot") or (http.request.uri.path contains "doofinder") or (http.request.uri.path contains "M2ePro") or (http.request.uri.path contains "/rest/" and http.user_agent eq "Windsor/1.0") or (http.request.method eq "POST" and http.user_agent contains "PayPal" and (http.request.uri.path contains "paypal" or http.request.uri.query contains "paypal")) or (http.request.method eq "POST" and starts_with(http.user_agent, "Stripe/") and (http.request.uri.path contains "stripe" or http.request.uri.query contains "stripe")) or (http.request.method eq "POST" and ip.src.country in {"SM" "IT"} and http.request.uri.path contains "bkn") or (ip.src in {141.95.207.193 54.37.80.17 147.135.136.178 147.135.137.18 147.135.137.31}) or (ip.src eq 138.199.169.63 and starts_with(http.user_agent, "ThespaceManage/"))
 ```

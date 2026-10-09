@@ -52,10 +52,7 @@
   "kitchenoo.it": {
     "profile": "woocommerce",
     "tier": "standard",
-    "description": "Kitchenoo",
-    "extra_whitelist": [
-      "catchr"
-    ]
+    "description": "Kitchenoo"
   },
   "ninalilou.com": {
     "profile": "woocommerce",
@@ -251,5 +248,10 @@
     "profile": "wordpress",
     "tier": "standard",
     "description": "Top Deck GCC"
+  },
+  "anticaenotecagiulianelli.com": {
+    "profile": "woocommerce",
+    "tier": "standard",
+    "description": "Antica Enoteca Giulianelli"
   }
 }

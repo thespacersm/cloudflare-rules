@@ -21,6 +21,7 @@
       "paypal-webhook",
       "stripe-webhook",
       "bkn-webhook",
+      "catchr",
       "thespace-manage"
     ],
     "verifylist": "verifylist-countries",

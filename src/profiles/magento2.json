@@ -26,6 +26,7 @@
       "bkn-webhook",
       "satispay",
       "ai-operations",
+      "catchr",
       "thespace-manage"
     ],
     "verifylist": "verifylist-countries",
