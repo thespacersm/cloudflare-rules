@@ -221,5 +221,35 @@
     "profile": "wordpress",
     "tier": "standard",
     "description": "Phisicol"
+  },
+  "natumparfum.com": {
+    "profile": "woocommerce",
+    "tier": "standard",
+    "description": "Natum Parfum"
+  },
+  "ntcapitalsg.sm": {
+    "profile": "wordpress",
+    "tier": "standard",
+    "description": "NT Capital SG"
+  },
+  "somm.it": {
+    "profile": "wordpress",
+    "tier": "standard",
+    "description": "SOMM"
+  },
+  "sordisanmarino.com": {
+    "profile": "wordpress",
+    "tier": "standard",
+    "description": "Sordi San Marino"
+  },
+  "specialemme.com": {
+    "profile": "wordpress",
+    "tier": "standard",
+    "description": "Specialemme"
+  },
+  "topdeckgcc.com": {
+    "profile": "wordpress",
+    "tier": "standard",
+    "description": "Top Deck GCC"
   }
 }
