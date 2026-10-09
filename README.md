@@ -145,6 +145,7 @@ Override opzionali per sito:
 |---|---|
 | `edge_ttl` | Edge TTL in secondi al posto di quello del tier |
 | `extra_bypass` | Path (`contains`) da non cachare, in aggiunta a quelli del profilo |
+| `bypass_query` | Query string (`contains`) da non cachare, utile con la cache key che ignora la query (es. `["s="]` per la ricerca WordPress) |
 | `bypass_except` | Path cachati anche se matchano un bypass (es. `/customer/account/login` con `/customer/` in bypass) |
 | `standard_cache_key` | `true` usa la cache key standard di Cloudflare (query string completa). Necessario sui piani non Enterprise, che rifiutano le esclusioni dei parametri di tracking (`not entitled to use the custom cache key override`) |
 | `cache_logged_in` | `true` rimuove il bypass sui cookie di sessione: anche gli utenti loggati ricevono le pagine cachate. Solo se l'HTML è identico per tutti i clienti (nessun prezzo per gruppo, dati personali caricati via AJAX) |

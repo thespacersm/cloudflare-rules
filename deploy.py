@@ -188,7 +188,7 @@ CACHE_STATIC_EXTENSIONS = ("css", "js", "jpg", "jpeg", "png", "gif", "webp", "av
 
 
 def build_cache_payload(profile, cache_cfg=None):
-    """cache_cfg: dict {tier, edge_ttl?, extra_bypass?, bypass_except?, cache_logged_in?, only_paths?};
+    """cache_cfg: dict {tier, edge_ttl?, extra_bypass?, bypass_query?, bypass_except?, cache_logged_in?, only_paths?};
     None = profile default FPC + bypass."""
     title = profile["title"].upper()
     cache_cfg = cache_cfg or {}
@@ -218,6 +218,8 @@ def build_cache_payload(profile, cache_cfg=None):
     ]
     for path in cache_cfg.get("extra_bypass", []):
         bypass_parts.append(f'(http.request.uri.path contains "{path}")')
+    for q in cache_cfg.get("bypass_query", []):
+        bypass_parts.append(f'(http.request.uri.query contains "{q}")')
     bypass_expr = " or ".join(bypass_parts)
     # bypass_except: paths cached even if a bypass item matches them (e.g. login under /customer/)
     except_parts = [f'http.request.uri.path contains "{path}"' for path in cache_cfg.get("bypass_except", [])]

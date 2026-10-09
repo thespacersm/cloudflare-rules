@@ -201,5 +201,25 @@
     "profile": "woocommerce",
     "tier": "standard",
     "description": "Kiss Rimini"
+  },
+  "proaudio-group.com": {
+    "profile": "wordpress",
+    "tier": "standard",
+    "description": "ProAudio Group",
+    "cache": {
+      "tier": "static",
+      "only_paths": [
+        "/"
+      ],
+      "edge_ttl": 86400,
+      "bypass_query": [
+        "s="
+      ]
+    }
+  },
+  "phisicol.it": {
+    "profile": "wordpress",
+    "tier": "standard",
+    "description": "Phisicol"
   }
 }
